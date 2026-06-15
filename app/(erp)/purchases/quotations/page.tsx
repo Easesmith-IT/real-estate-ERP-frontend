@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { QuotationsWorkspace } from "@/components/erp/quotations-workspace";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="purchases" pageSlug="quotations" />;
+  return <QuotationsWorkspace />;
 }

@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { PipelineWorkspace } from "@/components/erp/pipeline/pipeline-workspace";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="sales" pageSlug="pipeline" />;
+  return <PipelineWorkspace />;
 }

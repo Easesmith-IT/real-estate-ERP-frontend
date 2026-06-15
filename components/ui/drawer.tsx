@@ -1,6 +1,8 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -10,28 +12,57 @@ type DrawerProps = {
   open: boolean;
   title: string;
   side?: "left" | "right";
+  size?: "md" | "lg" | "xl";
   onClose: () => void;
   children: React.ReactNode;
 };
 
-export function Drawer({ open, title, side = "right", onClose, children }: DrawerProps) {
+export function Drawer({ open, title, side = "right", size = "md", onClose, children }: DrawerProps) {
   const trapRef = useFocusTrap(open, onClose);
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const scrollRoot = document.querySelector(".scroll-root") as HTMLElement;
+    if (open) {
+      document.body.style.overflow = "hidden";
+      if (scrollRoot) {
+        scrollRoot.style.overflow = "hidden";
+      }
+    }
+    return () => {
+      document.body.style.overflow = "";
+      if (scrollRoot) {
+        scrollRoot.style.overflow = "";
+      }
+    };
+  }, [open]);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
-        <div
-          className="fixed inset-0 z-[var(--z-overlay)] bg-overlay"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.24, ease: "easeInOut" }}
+          className="fixed inset-0 z-[var(--z-overlay)] bg-overlay backdrop-blur-[1px]"
           onClick={onClose}
         >
           <motion.aside
             ref={trapRef}
-            initial={{ x: side === "right" ? 320 : -320 }}
+            initial={{ x: side === "right" ? "100%" : "-100%" }}
             animate={{ x: 0 }}
-            exit={{ x: side === "right" ? 320 : -320 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            exit={{ x: side === "right" ? "100%" : "-100%" }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              "absolute top-0 z-[var(--z-modal)] flex h-full w-full max-w-md flex-col border-border-soft bg-surface shadow-floating",
+              "fixed top-0 bottom-0 z-[var(--z-modal)] flex h-full w-full flex-col border-border-soft bg-surface shadow-floating",
+              size === "md" ? "max-w-md" : size === "lg" ? "max-w-3xl" : "max-w-5xl",
               side === "right" ? "right-0 border-l" : "left-0 border-r",
             )}
             onClick={(e) => e.stopPropagation()}
@@ -44,8 +75,9 @@ export function Drawer({ open, title, side = "right", onClose, children }: Drawe
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
           </motion.aside>
-        </div>
+        </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

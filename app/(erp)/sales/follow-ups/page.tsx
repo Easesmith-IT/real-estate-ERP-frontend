@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { FollowUpsWorkspace } from "@/components/erp/follow-ups/follow-ups-workspace";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="sales" pageSlug="follow-ups" />;
+  return <FollowUpsWorkspace />;
 }

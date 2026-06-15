@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { SiteVisitIntelligenceCenter } from "@/components/erp/site-visits/site-visit-intelligence-center";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="sales" pageSlug="site-visits" />;
+  return <SiteVisitIntelligenceCenter />;
 }

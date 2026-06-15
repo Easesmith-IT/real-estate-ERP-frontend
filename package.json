@@ -1,12 +1,13 @@
 {
-  "name": "real-estate-erp-frontend",
+  "name": "real-estate-erp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "typecheck": "node scripts/ensure-next-route-types.mjs && tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.14",
@@ -17,6 +18,7 @@
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "recharts": "^3.8.1",
     "tailwind-merge": "^3.6.0",
     "zustand": "^5.0.13"
   },

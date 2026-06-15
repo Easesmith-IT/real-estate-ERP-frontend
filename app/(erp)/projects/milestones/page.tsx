@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { MilestonesCommandCenter } from "@/components/erp/projects/milestones-command-center";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="projects" pageSlug="milestones" />;
+  return <MilestonesCommandCenter />;
 }

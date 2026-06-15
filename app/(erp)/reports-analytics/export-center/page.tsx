@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { ExportCenterWorkspace } from "@/components/erp/live-phase2";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="reports-analytics" pageSlug="export-center" />;
+  return <ExportCenterWorkspace />;
 }

@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import MaterialsIntelligenceCenter from "@/components/erp/materials/materials-intelligence-center";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="materials" pageSlug="stock-alerts" />;
+  return <MaterialsIntelligenceCenter />;
 }

@@ -1,5 +1,5 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { SettingsOverviewWorkspace } from "@/components/erp/live-settings";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="settings" />;
+  return <SettingsOverviewWorkspace />;
 }

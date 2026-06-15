@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { BrokersIntelligenceCenter } from "@/components/erp/brokers/brokers-intelligence-center";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="sales" pageSlug="brokers" />;
+  return <BrokersIntelligenceCenter />;
 }

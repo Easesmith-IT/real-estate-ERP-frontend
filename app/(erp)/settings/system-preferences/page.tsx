@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { WorkflowSettingsWorkspace } from "@/components/erp/live-phase2";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="settings" pageSlug="system-preferences" />;
+  return <WorkflowSettingsWorkspace />;
 }

@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { FinancialOverviewWorkspace } from "@/components/erp/live-management";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="reports-analytics" pageSlug="financial-reports" />;
+  return <FinancialOverviewWorkspace />;
 }

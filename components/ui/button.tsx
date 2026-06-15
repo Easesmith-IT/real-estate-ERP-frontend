@@ -9,6 +9,7 @@ const buttonVariants = cva(
       variant: {
         primary: "bg-accent-primary text-white shadow-enterprise hover:bg-accent-primary-hover hover:-translate-y-px",
         secondary: "bg-surface border border-border-soft text-text-secondary hover:bg-hover",
+        outline: "border border-border-soft bg-transparent text-text-secondary hover:bg-hover hover:text-text-primary",
         ghost: "bg-transparent text-text-secondary hover:bg-hover hover:text-text-primary",
         danger: "bg-error text-white shadow-soft hover:bg-error-hover",
         ai: "border border-accent-primary/25 bg-linear-to-r from-accent-primary/12 via-surface to-accent-secondary/12 text-text-primary shadow-[0_2px_10px_rgba(37,99,235,0.14)] hover:border-accent-primary/45 hover:-translate-y-px",
@@ -34,7 +35,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, loading, children, ...props }, ref) => {
     return (
       <button ref={ref} className={cn(buttonVariants({ variant, size }), className)} disabled={loading || props.disabled} {...props}>
-        {loading && <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />}
+        {loading && <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current/30 border-t-current shrink-0" />}
         {children}
       </button>
     );

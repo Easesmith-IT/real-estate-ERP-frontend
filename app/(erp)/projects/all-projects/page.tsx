@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { ProjectsPortfolioWorkspace } from "@/components/erp/projects/projects-portfolio-workspace";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="projects" pageSlug="all-projects" />;
+  return <ProjectsPortfolioWorkspace />;
 }

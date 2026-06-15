@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { OperationalOverviewWorkspace } from "@/components/erp/live-phase3";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="management" pageSlug="operational-overview" />;
+  return <OperationalOverviewWorkspace />;
 }

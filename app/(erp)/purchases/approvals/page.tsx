@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { ApprovalQueueWorkspace } from "@/components/erp/approvals-command-center";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="purchases" pageSlug="approvals" />;
+  return <ApprovalQueueWorkspace />;
 }

@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { ProjectDocumentVault } from "@/components/erp/projects/project-document-vault";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="projects" pageSlug="documents" />;
+  return <ProjectDocumentVault />;
 }

@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="materials" pageSlug="transfers" />;
+  redirect("/materials/stock-management");
 }

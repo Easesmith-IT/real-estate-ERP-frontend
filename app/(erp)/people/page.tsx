@@ -1,5 +1,5 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { WorkforceInsightsWorkspace } from "@/components/erp/live-phase3";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="people" />;
+  return <WorkforceInsightsWorkspace />;
 }

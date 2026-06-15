@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { ExecutiveDashboardWorkspace } from "@/components/erp/live-phase2";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="management" pageSlug="executive-dashboard" />;
+  return <ExecutiveDashboardWorkspace />;
 }

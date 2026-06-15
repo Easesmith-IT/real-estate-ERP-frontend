@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { ContractorList } from "@/components/erp/contractors/contractor-list";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="people" pageSlug="contractors" />;
+  return <ContractorList />;
 }

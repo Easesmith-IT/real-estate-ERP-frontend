@@ -19,8 +19,12 @@ export function Modal({ open, title, description, onClose, children }: ModalProp
   return (
     <AnimatePresence>
       {open && (
-        <div
-          className="fixed inset-0 z-[var(--z-overlay)] flex items-center justify-center bg-overlay p-6"
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.24, ease: "easeInOut" }}
+          className="fixed inset-0 z-[var(--z-overlay)] flex items-center justify-center bg-overlay p-6 backdrop-blur-[1px]"
           onClick={onClose}
         >
           <motion.div
@@ -28,7 +32,7 @@ export function Modal({ open, title, description, onClose, children }: ModalProp
             initial={{ opacity: 0, scale: 0.98, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 8 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-[var(--z-modal)] w-full max-w-2xl rounded-[var(--radius-modal)] border border-border-soft bg-surface shadow-floating"
             onClick={(e) => e.stopPropagation()}
           >
@@ -43,7 +47,7 @@ export function Modal({ open, title, description, onClose, children }: ModalProp
             </div>
             <div className="px-6 py-5">{children}</div>
           </motion.div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

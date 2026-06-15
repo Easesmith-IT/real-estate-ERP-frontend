@@ -1,5 +1,5 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { ExecutiveDashboardWorkspace } from "@/components/erp/live-phase2";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="management" />;
+  return <ExecutiveDashboardWorkspace />;
 }

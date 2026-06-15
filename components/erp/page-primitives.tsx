@@ -1,4 +1,4 @@
-import { ArrowRight, Download, Filter, Plus, Search } from "lucide-react";
+import { ArrowRight, Download, Filter, Plus, RotateCcw, Search } from "lucide-react";
 import Link from "next/link";
 import { getPageHref, getSectionDefaultHref } from "@/lib/navigation";
 import { NavPage, NavSection } from "@/types/navigation";
@@ -115,6 +115,94 @@ export function FilterToolbar({
       </div>
       {rightSlot}
     </div>
+  );
+}
+
+export function TableToolbar({
+  searchPlaceholder,
+  searchValue,
+  onSearchChange,
+  filters,
+  actions,
+  resultLabel,
+  summary,
+  activeFilters = [],
+  onClear,
+}: {
+  searchPlaceholder: string;
+  searchValue: string;
+  onSearchChange: (value: string) => void;
+  filters?: React.ReactNode;
+  actions?: React.ReactNode;
+  resultLabel: string;
+  summary?: string;
+  activeFilters?: string[];
+  onClear?: () => void;
+}) {
+  const showClear = Boolean(onClear) && (searchValue.trim().length > 0 || activeFilters.length > 0);
+
+  return (
+    <div className="border-b border-border-soft bg-surface-secondary/80">
+      <div className="space-y-4 px-4 py-4">
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+          <div className="relative min-w-0 flex-1 xl:max-w-[640px]">
+            <Search className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-text-muted" />
+            <Input
+              value={searchValue}
+              onChange={(event) => onSearchChange(event.target.value)}
+              placeholder={searchPlaceholder}
+              className="h-12 rounded-[var(--radius-input)] border-white/70 bg-white pl-10 shadow-soft"
+            />
+          </div>
+          {actions ? <div className="flex flex-wrap items-center gap-2 xl:justify-end">{actions}</div> : null}
+        </div>
+        {filters ? (
+          <div className="overflow-x-auto pb-1">
+            <div className="flex min-w-max items-center gap-3 rounded-[24px] border border-border-soft/80 bg-white/90 p-2 shadow-soft">
+              {filters}
+            </div>
+          </div>
+        ) : null}
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border-soft px-4 py-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone="neutral">{resultLabel}</Badge>
+          {activeFilters.map((filter) => (
+            <Badge key={filter} tone="info">
+              {filter}
+            </Badge>
+          ))}
+          {showClear ? (
+            <Button variant="ghost" size="sm" onClick={onClear}>
+              <RotateCcw className="h-4 w-4" />
+              Reset
+            </Button>
+          ) : null}
+        </div>
+        {summary ? <p className="text-label text-text-muted">{summary}</p> : null}
+      </div>
+    </div>
+  );
+}
+
+export function TableEmptyStateRow({
+  colSpan,
+  title,
+  description,
+}: {
+  colSpan: number;
+  title: string;
+  description: string;
+}) {
+  return (
+    <tr>
+      <td colSpan={colSpan} className="px-4 py-10">
+        <div className="rounded-[var(--radius-card)] border border-dashed border-border-soft bg-surface-secondary px-5 py-8 text-center">
+          <p className="text-card-title text-text-primary">{title}</p>
+          <p className="mt-2 text-body text-text-secondary">{description}</p>
+        </div>
+      </td>
+    </tr>
   );
 }
 
@@ -283,7 +371,7 @@ export function TabsRow({ tabs }: { tabs: string[] }) {
         <button
           type="button"
           key={tab}
-          className={`rounded-[var(--radius-input)] border px-4 py-2 text-body subtle-hover ${
+          className={`rounded-[var(--radius-button)] border px-4 py-2 text-body subtle-hover ${
             index === 0
               ? "border-accent-primary bg-active-soft text-accent-primary"
               : "border-border-soft bg-surface text-text-secondary hover:bg-hover"

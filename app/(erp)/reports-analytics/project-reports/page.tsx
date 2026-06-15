@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { ProjectInsightsWorkspace } from "@/components/erp/live-phase3";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="reports-analytics" pageSlug="project-reports" />;
+  return <ProjectInsightsWorkspace />;
 }

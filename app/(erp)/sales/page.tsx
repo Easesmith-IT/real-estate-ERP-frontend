@@ -1,5 +1,5 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { SalesInsightsWorkspace } from "@/components/erp/live-sales";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="sales" />;
+  return <SalesInsightsWorkspace />;
 }

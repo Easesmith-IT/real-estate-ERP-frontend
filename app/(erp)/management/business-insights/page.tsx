@@ -1,5 +1,6 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { BusinessInsightsWorkspace } from "@/components/erp/business-insights-workspace";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="management" pageSlug="business-insights" />;
+  return <BusinessInsightsWorkspace />;
 }
+

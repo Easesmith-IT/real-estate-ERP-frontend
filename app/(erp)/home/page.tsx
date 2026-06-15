@@ -1,5 +1,8 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { notFound } from "next/navigation";
+import { SectionOverviewPage, resolveSectionOrNull } from "@/components/erp/section-page";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="home" />;
+  const section = resolveSectionOrNull("home");
+  if (!section) notFound();
+  return <SectionOverviewPage section={section} />;
 }

@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { PermissionsWorkspace } from "@/components/erp/live-settings";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="settings" pageSlug="users-permissions" />;
+  return <PermissionsWorkspace />;
 }

@@ -6,14 +6,16 @@ import { cn } from "@/lib/utils";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { AICommandPalette } from "@/components/ai/command-palette";
+import { NotificationCenter } from "@/components/ai/notification-center";
 import { WorkflowAssistantPanel } from "@/components/ai/workflow-assistant-panel";
+import { ToastContainer } from "@/components/ui/toast";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const sidebarCollapsed = useUiStore((state) => state.sidebarCollapsed);
   const toggleCommandPalette = useUiStore((state) => state.toggleCommandPalette);
   const scrollRootRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
-  const sidebarWidth = sidebarCollapsed ? "88px" : "280px";
+  const sidebarWidth = sidebarCollapsed ? "80px" : "260px";
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -46,9 +48,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div
         ref={scrollRootRef}
         className={cn(
-          "scroll-root h-[calc(100dvh-var(--app-pad-sm)*2)] overflow-y-auto overflow-x-hidden transition-[margin] duration-300 lg:h-[calc(100dvh-var(--app-pad-lg)*2)]",
+          "scroll-root h-[calc(100dvh-var(--app-pad-sm)*2)] overflow-y-auto overflow-x-hidden lg:h-[calc(100dvh-var(--app-pad-lg)*2)]",
           "ml-0 lg:ml-[calc(var(--sidebar-width)+var(--app-pad-lg))]",
         )}
+        style={{ transition: "margin-left 320ms cubic-bezier(0.22, 1, 0.36, 1)" } as CSSProperties}
         data-scrolled={scrolled ? "true" : "false"}
       >
         <Topbar scrolled={scrolled} />
@@ -57,7 +60,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </main>
       </div>
       <AICommandPalette />
+      <NotificationCenter />
       <WorkflowAssistantPanel />
+      <ToastContainer />
     </div>
   );
 }
+

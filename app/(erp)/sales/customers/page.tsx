@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { CustomerWorkspace } from "@/components/erp/customers/customer-workspace";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="sales" pageSlug="customers" />;
+  return <CustomerWorkspace />;
 }

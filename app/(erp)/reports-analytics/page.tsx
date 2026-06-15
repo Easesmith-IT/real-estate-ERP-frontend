@@ -1,5 +1,5 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { FinancialOverviewWorkspace } from "@/components/erp/live-management";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="reports-analytics" />;
+  return <FinancialOverviewWorkspace />;
 }

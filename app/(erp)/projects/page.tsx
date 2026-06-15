@@ -1,5 +1,5 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { ProjectsPortfolioWorkspace } from "@/components/erp/projects/projects-portfolio-workspace";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="projects" />;
+  return <ProjectsPortfolioWorkspace />;
 }

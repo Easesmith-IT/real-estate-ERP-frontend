@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { PayrollWorkspace } from "@/components/erp/payroll/payroll-workspace";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="people" pageSlug="payroll" />;
+  return <PayrollWorkspace />;
 }

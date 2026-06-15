@@ -1,5 +1,5 @@
-import { EmptyChildPage } from "@/components/erp/empty-page-template";
+import { PurchaseOrdersWorkspace } from "@/components/erp/live-phase3";
 
 export default function Page() {
-  return <EmptyChildPage sectionSlug="purchases" pageSlug="purchase-orders" />;
+  return <PurchaseOrdersWorkspace />;
 }

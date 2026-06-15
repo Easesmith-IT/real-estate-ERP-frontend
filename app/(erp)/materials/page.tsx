@@ -1,5 +1,5 @@
-import { EmptySectionPage } from "@/components/erp/empty-page-template";
+import { MaterialReportsWorkspace } from "@/components/erp/live-phase3";
 
 export default function Page() {
-  return <EmptySectionPage sectionSlug="materials" />;
+  return <MaterialReportsWorkspace />;
 }
