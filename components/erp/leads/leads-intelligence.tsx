@@ -22,7 +22,7 @@ interface LeadsIntelligenceProps {
 export function LeadsIntelligence({ onAction, isLoading }: LeadsIntelligenceProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
         {Array.from({ length: 5 }).map((_, idx) => (
           <Card key={idx} className="animate-pulse bg-surface-secondary">
             <CardHeader className="h-10 border-none" />
@@ -113,7 +113,7 @@ export function LeadsIntelligence({ onAction, isLoading }: LeadsIntelligenceProp
   return (
     <div className="space-y-3">
       <h2 className="text-section-title font-secondary text-text-primary">Sales Intelligence Center</h2>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
         {recommendations.map((rec) => {
           const { icon: IconComponent, bg, badgeTone, iconColor } = getStyle(rec.type);
           return (

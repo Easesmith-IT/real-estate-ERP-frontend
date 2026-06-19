@@ -15,7 +15,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const toggleCommandPalette = useUiStore((state) => state.toggleCommandPalette);
   const scrollRootRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
-  const sidebarWidth = sidebarCollapsed ? "80px" : "260px";
+  const sidebarWidth = sidebarCollapsed ? "64px" : "260px";
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -51,7 +51,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           "scroll-root h-[calc(100dvh-var(--app-pad-sm)*2)] overflow-y-auto overflow-x-hidden lg:h-[calc(100dvh-var(--app-pad-lg)*2)]",
           "ml-0 lg:ml-[calc(var(--sidebar-width)+var(--app-pad-lg))]",
         )}
-        style={{ transition: "margin-left 320ms cubic-bezier(0.22, 1, 0.36, 1)" } as CSSProperties}
+        style={{ transition: "margin-left 240ms cubic-bezier(0.22, 1, 0.36, 1)" } as CSSProperties}
         data-scrolled={scrolled ? "true" : "false"}
       >
         <Topbar scrolled={scrolled} />

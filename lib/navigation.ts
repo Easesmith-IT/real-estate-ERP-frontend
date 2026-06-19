@@ -16,7 +16,7 @@ export const navSections: NavSection[] = [
     label: "Home",
     slug: "home",
     icon: "House",
-    description: "Operations command center, activity stream, and daily quick actions.",
+    description: "Operations dashboard, activity stream, and daily quick actions.",
     roles: allRoles,
     pages: [
       {
@@ -79,7 +79,7 @@ export const navSections: NavSection[] = [
       {
         label: "Workforce Insights",
         slug: "workforce-insights",
-        description: "Workforce analytics placeholders with performance and utilization trends.",
+        description: "Workforce analytics with performance and utilization trends.",
         template: "analytics",
       },
     ],
@@ -106,7 +106,7 @@ export const navSections: NavSection[] = [
       {
         label: "Site Visits",
         slug: "site-visits",
-        description: "Visit scheduling calendar and engagement outcomes placeholders.",
+        description: "Visit scheduling calendar and engagement outcomes summary.",
         template: "directory",
       },
       {
@@ -163,7 +163,7 @@ export const navSections: NavSection[] = [
       {
         label: "Daily Reports",
         slug: "daily-reports",
-        description: "DPR placeholders for site updates, blockers, and shift summaries.",
+        description: "Daily progress reports (DPR) for site updates, blockers, and shift summaries.",
         template: "daily-report",
       },
       {
@@ -175,19 +175,19 @@ export const navSections: NavSection[] = [
       {
         label: "Site Updates",
         slug: "site-updates",
-        description: "Field updates timeline with status and media placeholders.",
+        description: "Field updates timeline with status and media records.",
         template: "activity",
       },
       {
         label: "Documents",
         slug: "documents",
-        description: "Project document listing with categories and version placeholders.",
+        description: "Project document repository with categories and version tracking.",
         template: "documents",
       },
       {
         label: "Project Insights",
         slug: "project-insights",
-        description: "Project analytics placeholders for productivity and completion trends.",
+        description: "Project analytics for productivity and completion trends.",
         template: "analytics",
       },
     ],
@@ -241,7 +241,7 @@ export const navSections: NavSection[] = [
       {
         label: "Quotations",
         slug: "quotations",
-        description: "Quotation comparison layout with pricing and turnaround placeholders.",
+        description: "Quotation comparison layout with pricing and turnaround details.",
         template: "comparison",
       },
       {
@@ -259,7 +259,7 @@ export const navSections: NavSection[] = [
       {
         label: "Purchase Reports",
         slug: "purchase-reports",
-        description: "Purchase analytics and export-ready report placeholders.",
+        description: "Purchase analytics and export-ready reports.",
         template: "reports",
       },
     ],
@@ -289,7 +289,7 @@ export const navSections: NavSection[] = [
       {
         label: "Executive Dashboard",
         slug: "executive-dashboard",
-        description: "Premium executive dashboard with top-level KPIs and trend snapshots.",
+        description: "Executive dashboard with top-level KPIs and performance snapshots.",
         template: "executive",
       },
       {
@@ -316,7 +316,7 @@ export const navSections: NavSection[] = [
       {
         label: "Users & Permissions",
         slug: "users-permissions",
-        description: "Role management layout and permission matrix placeholders.",
+        description: "Role management layout and permission matrix configurations.",
         template: "permissions",
       },
       {

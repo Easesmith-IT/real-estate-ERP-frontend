@@ -29,8 +29,8 @@ export function WorkflowAssistantPanel() {
       <div className="space-y-4">
         <div className="rounded-[var(--radius-card)] border border-border-soft bg-surface-secondary p-4">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge tone="info">Demo AI mode</Badge>
-            <p className="text-label text-text-muted">Simulation only. Uses deterministic ERP data summaries.</p>
+            <Badge tone="info">Operational Mode</Badge>
+            <p className="text-label text-text-muted">Deterministic operational summaries based on active data registers.</p>
           </div>
         </div>
 
@@ -73,7 +73,7 @@ export function WorkflowAssistantPanel() {
 
             <div className="flex gap-3">
               <Button variant="secondary" className="flex-1" onClick={() => toggleCommandPalette(true)}>
-                Run another command
+                Execute another command
               </Button>
               <Button variant="ghost" className="flex-1" onClick={clearAssistantSession}>
                 Clear result
@@ -90,7 +90,11 @@ export function WorkflowAssistantPanel() {
                   <p className="mt-3 text-body text-text-secondary">{overviewQuery.data.summary}</p>
                 </>
               ) : (
-                <p className="mt-2 text-body text-text-secondary">Loading assistant overview...</p>
+                <div className="mt-2 space-y-2">
+                  <div className="h-6 w-3/4 rounded shimmer-skeleton" />
+                  <div className="h-4 w-full rounded shimmer-skeleton" />
+                  <div className="h-4 w-5/6 rounded shimmer-skeleton" />
+                </div>
               )}
             </div>
 
@@ -126,7 +130,7 @@ export function WorkflowAssistantPanel() {
 
             <Button className="w-full" onClick={() => toggleCommandPalette(true)}>
               <Sparkles className="h-4 w-4" />
-              Open AI command palette
+              Open Command Center
             </Button>
           </>
         )}

@@ -254,7 +254,7 @@ function HeroSection({ kpis, onNewBooking }: { kpis: CustomerKpiSnapshot; onNewB
       <div className="relative z-10 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
         <div className="space-y-4 max-w-3xl">
           <Badge tone="success" className="px-2.5 py-1 text-[11px] uppercase tracking-wider font-bold">
-            Premium Relationship Command Center
+            Customer Portfolio Overview
           </Badge>
           <h1 className="text-page-title font-secondary font-bold text-text-primary mt-1">
             Customer Relationship Center
@@ -263,37 +263,37 @@ function HeroSection({ kpis, onNewBooking }: { kpis: CustomerKpiSnapshot; onNewB
             Monitor customer portfolio health, booking performance, payment collections, outstanding dues, and revenue realization across all projects.
           </p>
           <div className="flex flex-wrap gap-2.5 pt-2">
-            <Button variant="outline" size="md" className="h-10">
+            <Button variant="outline" size="md" className="h-10 gap-1.5">
               <Download className="h-4 w-4" /> Export Register
             </Button>
-            <Button variant="outline" size="md" className="h-10">
+            <Button variant="outline" size="md" className="h-10 gap-1.5">
               <FileText className="h-4 w-4" /> Collection Report
             </Button>
-            <Button variant="outline" size="md" className="h-10">
+            <Button variant="outline" size="md" className="h-10 gap-1.5">
               <BarChart3 className="h-4 w-4" /> Customer Analytics
             </Button>
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch gap-4 shrink-0">
-          <div className="bg-surface border border-border-soft rounded-[var(--radius-card)] p-5 text-center sm:min-w-[160px] flex flex-col justify-center shadow-soft">
-            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Portfolio Health</span>
-            <span className="text-[32px] font-bold text-text-primary mt-1">92%</span>
-            <Badge tone="success" className="mt-2 self-center text-[10px] font-bold px-2 py-0.5">Excellent</Badge>
+        <div className="flex flex-col gap-3.5 shrink-0 justify-center w-full xl:w-auto sm:max-w-md xl:max-w-none">
+          <div className="flex flex-col sm:flex-row items-stretch gap-3.5">
+            <div className="bg-surface border border-border-soft rounded-[var(--radius-card)] p-5 text-center flex-1 sm:min-w-[160px] flex flex-col justify-center shadow-soft">
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Portfolio Health</span>
+              <span className="text-2xl font-bold text-text-primary mt-1">92%</span>
+              <Badge tone="success" className="mt-2 self-center text-[10px] font-bold px-2 py-0.5">Excellent</Badge>
+            </div>
+            <div className="bg-surface border border-border-soft rounded-[var(--radius-card)] p-5 text-center flex-1 sm:min-w-[160px] flex flex-col justify-center shadow-soft">
+              <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider">Realized Cash</span>
+              <span className="text-2xl font-bold text-text-primary mt-1">{formatPortfolioValue(kpis.revenueRealized)}</span>
+              <span className="text-[10px] font-medium text-text-muted mt-2 block">{kpis.collectionRatio}% Efficiency</span>
+            </div>
           </div>
-          <div className="bg-surface border border-border-soft rounded-[var(--radius-card)] p-5 text-center sm:min-w-[160px] flex flex-col justify-center shadow-soft">
-            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">Realized Cash</span>
-            <span className="text-[32px] font-bold text-text-primary mt-1">{formatPortfolioValue(kpis.revenueRealized)}</span>
-            <span className="text-[11px] font-medium text-text-muted mt-2 block">{kpis.collectionRatio}% Efficiency</span>
-          </div>
-          <div className="flex flex-col justify-center gap-2">
-            <Button
-              variant="primary"
-              className="h-12 px-6 font-semibold shadow-enterprise"
-              onClick={onNewBooking}
-            >
-              <Plus className="h-5 w-5 mr-1" /> New Booking
-            </Button>
-          </div>
+          <Button
+            variant="primary"
+            className="w-full h-11 font-semibold shadow-enterprise gap-1.5"
+            onClick={onNewBooking}
+          >
+            <Plus className="h-4.5 w-4.5" /> New Booking
+          </Button>
         </div>
       </div>
     </div>

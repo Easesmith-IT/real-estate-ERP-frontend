@@ -448,7 +448,7 @@ export function ProjectsPortfolioWorkspace() {
               className="text-white gap-1.5 h-10 font-semibold"
             >
               <Plus className="h-4.5 w-4.5" />
-              <span>Add Project</span>
+              <span>Create Project</span>
             </Button>
           </div>
         }
@@ -875,12 +875,9 @@ export function ProjectsPortfolioWorkspace() {
             >
               <CardContent className="p-4 flex flex-col justify-between h-full space-y-4">
                 <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <Badge tone={getStageTone(project.stage)} className="text-label truncate py-0">
+                  <div className="flex items-center justify-between">
+                    <Badge tone={getStageTone(project.stage)} className="text-label font-medium whitespace-nowrap shrink-0">
                       {project.stage}
-                    </Badge>
-                    <Badge tone={getHealthTone(project.health)} className="font-bold">
-                      H: {project.health}
                     </Badge>
                   </div>
                   <h4 className="font-semibold text-body text-text-primary mt-3 truncate">{project.name}</h4>
@@ -888,6 +885,12 @@ export function ProjectsPortfolioWorkspace() {
                 </div>
 
                 <div className="space-y-2 border-t border-border-soft/60 pt-3">
+                  <div className="flex items-center justify-between text-label">
+                    <span className="text-text-muted">Health Score</span>
+                    <Badge tone={getHealthTone(project.health)} className="font-bold text-[10px] px-1.5 py-0 shrink-0">
+                      {project.health} - {getHealthLabel(project.health)}
+                    </Badge>
+                  </div>
                   <div className="flex items-center justify-between text-label">
                     <span className="text-text-muted">Portfolio Value</span>
                     <span className="font-bold text-text-primary">{formatCr(project.inventoryValue)}</span>

@@ -242,12 +242,12 @@ export function MaterialRiskCenter({
 
     return (
       <div className="space-y-1 mt-3">
-        <div className="flex items-center justify-between text-[10px] text-text-secondary">
+        <div className="flex items-center justify-between text-xs text-text-secondary">
           <span>Current: <strong>{onHand}</strong></span>
           <span>Threshold: {reorderLevel}</span>
         </div>
-        <div className="h-1.5 w-full bg-hover rounded-full overflow-hidden">
-          <div className={`h-1.5 rounded-full ${barColor}`} style={{ width: `${pct}%` }} />
+        <div className="h-2 w-full bg-hover rounded-full overflow-hidden">
+          <div className={`h-2 rounded-full ${barColor}`} style={{ width: `${pct}%` }} />
         </div>
       </div>
     );
@@ -266,19 +266,19 @@ export function MaterialRiskCenter({
           <Badge tone="error" className="animate-pulse">Live Risk Monitoring</Badge>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
           
           {/* Card 1: Critical Shortages */}
-          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow">
+          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow lg:col-span-2">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-error uppercase tracking-wider">Critical Shortage</span>
                 <ShieldAlert className="h-4 w-4 text-error" />
               </div>
-              <CardTitle className="text-2xl font-black text-text-primary mt-1">
+              <CardTitle className="text-3xl font-black text-text-primary mt-1">
                 {materials.filter(m => m.onHand <= m.reorderLevel * 0.25 || m.onHand === 0).length}
               </CardTitle>
-              <p className="text-[10px] text-text-secondary mt-0.5">Immediate stockout hazard</p>
+              <p className="text-xs text-text-secondary mt-0.5">Immediate stockout hazard</p>
             </CardHeader>
             <CardContent className="space-y-3 pt-0 flex-grow">
               {risks.criticalShortages.length === 0 ? (
@@ -287,10 +287,10 @@ export function MaterialRiskCenter({
                 risks.criticalShortages.map((item) => (
                   <div key={item.id} className="border-t border-border-soft/60 pt-2 first:border-none first:pt-0">
                     <div className="flex items-start justify-between gap-1">
-                      <span className="font-semibold text-xs text-text-primary truncate max-w-[120px]">{item.name}</span>
-                      <Badge tone="error" className="text-[8px] py-0 px-1 font-mono">{item.coverageDays}d left</Badge>
+                      <span className="font-semibold text-xs text-text-primary truncate max-w-[180px] md:max-w-[220px]">{item.name}</span>
+                      <Badge tone="error" className="text-[10px] px-1.5 py-0.5 font-mono">{item.coverageDays}d left</Badge>
                     </div>
-                    <p className="text-[9px] text-text-secondary truncate">{item.projectName} · {item.warehouseName}</p>
+                    <p className="text-xs text-text-secondary truncate">{item.projectName} · {item.warehouseName}</p>
                     {renderProgressBar(item.onHand, item.reorderLevel)}
                   </div>
                 ))
@@ -299,16 +299,16 @@ export function MaterialRiskCenter({
           </Card>
 
           {/* Card 2: Low Stock */}
-          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow">
+          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow lg:col-span-2">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-warning uppercase tracking-wider">Low Stock</span>
                 <AlertTriangle className="h-4 w-4 text-warning" />
               </div>
-              <CardTitle className="text-2xl font-black text-text-primary mt-1">
+              <CardTitle className="text-3xl font-black text-text-primary mt-1">
                 {materials.filter(m => m.status === "Low Stock" && m.onHand > m.reorderLevel * 0.25).length}
               </CardTitle>
-              <p className="text-[10px] text-text-secondary mt-0.5">Under safety margin threshold</p>
+              <p className="text-xs text-text-secondary mt-0.5">Under safety margin threshold</p>
             </CardHeader>
             <CardContent className="space-y-3 pt-0 flex-grow">
               {risks.lowStock.length === 0 ? (
@@ -317,10 +317,10 @@ export function MaterialRiskCenter({
                 risks.lowStock.map((item) => (
                   <div key={item.id} className="border-t border-border-soft/60 pt-2 first:border-none first:pt-0">
                     <div className="flex items-start justify-between gap-1">
-                      <span className="font-semibold text-xs text-text-primary truncate max-w-[120px]">{item.name}</span>
-                      <Badge tone="warning" className="text-[8px] py-0 px-1 font-mono">{item.coverageDays}d runway</Badge>
+                      <span className="font-semibold text-xs text-text-primary truncate max-w-[180px] md:max-w-[220px]">{item.name}</span>
+                      <Badge tone="warning" className="text-[10px] px-1.5 py-0.5 font-mono">{item.coverageDays}d runway</Badge>
                     </div>
-                    <p className="text-[9px] text-text-secondary truncate">{item.projectName} · {item.warehouseName}</p>
+                    <p className="text-xs text-text-secondary truncate">{item.projectName} · {item.warehouseName}</p>
                     {renderProgressBar(item.onHand, item.reorderLevel)}
                   </div>
                 ))
@@ -329,16 +329,16 @@ export function MaterialRiskCenter({
           </Card>
 
           {/* Card 3: Fast Consumption */}
-          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow">
+          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow lg:col-span-2">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-accent-primary uppercase tracking-wider">Fast Moving</span>
                 <TrendingUp className="h-4 w-4 text-accent-primary" />
               </div>
-              <CardTitle className="text-2xl font-black text-text-primary mt-1">
+              <CardTitle className="text-3xl font-black text-text-primary mt-1">
                 {materials.filter(m => m.averageConsumption >= 12 && m.onHand > 0 && Math.round(m.onHand / m.averageConsumption) <= 5).length}
               </CardTitle>
-              <p className="text-[10px] text-text-secondary mt-0.5">Spike in project burn-rate</p>
+              <p className="text-xs text-text-secondary mt-0.5">Spike in project burn-rate</p>
             </CardHeader>
             <CardContent className="space-y-3 pt-0 flex-grow">
               {risks.fastConsumption.length === 0 ? (
@@ -347,10 +347,10 @@ export function MaterialRiskCenter({
                 risks.fastConsumption.map((item) => (
                   <div key={item.id} className="border-t border-border-soft/60 pt-2 first:border-none first:pt-0">
                     <div className="flex items-start justify-between gap-1">
-                      <span className="font-semibold text-xs text-text-primary truncate max-w-[120px]">{item.name}</span>
-                      <Badge tone="info" className="text-[8px] py-0 px-1 font-mono">{item.averageConsumption}/d</Badge>
+                      <span className="font-semibold text-xs text-text-primary truncate max-w-[180px] md:max-w-[220px]">{item.name}</span>
+                      <Badge tone="info" className="text-[10px] px-1.5 py-0.5 font-mono">{item.averageConsumption}/d</Badge>
                     </div>
-                    <p className="text-[9px] text-text-secondary truncate">{item.projectName} · Runway: {item.coverageDays}d</p>
+                    <p className="text-xs text-text-secondary truncate">{item.projectName} · Runway: {item.coverageDays}d</p>
                     {renderProgressBar(item.onHand, item.reorderLevel)}
                   </div>
                 ))
@@ -359,16 +359,16 @@ export function MaterialRiskCenter({
           </Card>
 
           {/* Card 4: Reorder Due */}
-          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow">
+          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow lg:col-span-3">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-accent-secondary uppercase tracking-wider">Reorder Due</span>
                 <RefreshCw className="h-4 w-4 text-accent-secondary" />
               </div>
-              <CardTitle className="text-2xl font-black text-text-primary mt-1">
+              <CardTitle className="text-3xl font-black text-text-primary mt-1">
                 {materials.filter(m => m.onHand <= m.reorderLevel).length}
               </CardTitle>
-              <p className="text-[10px] text-text-secondary mt-0.5">Needs replenishment orders</p>
+              <p className="text-xs text-text-secondary mt-0.5">Needs replenishment orders</p>
             </CardHeader>
             <CardContent className="space-y-3 pt-0 flex-grow">
               {risks.reorderDue.length === 0 ? (
@@ -377,15 +377,15 @@ export function MaterialRiskCenter({
                 risks.reorderDue.map((item) => (
                   <div key={item.id} className="border-t border-border-soft/60 pt-2 first:border-none first:pt-0">
                     <div className="flex items-start justify-between gap-1">
-                      <span className="font-semibold text-xs text-text-primary truncate max-w-[120px]">{item.name}</span>
+                      <span className="font-semibold text-xs text-text-primary truncate max-w-[180px] md:max-w-[220px]">{item.name}</span>
                       <button 
-                        className="text-[10px] font-bold text-accent-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
+                        className="text-xs font-bold text-accent-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
                         onClick={() => onTriggerReorder?.(item)}
                       >
                         Procure
                       </button>
                     </div>
-                    <p className="text-[9px] text-text-secondary truncate">{item.warehouseName} · Deficit: {item.reorderLevel - item.onHand}</p>
+                    <p className="text-xs text-text-secondary truncate">{item.warehouseName} · Deficit: {item.reorderLevel - item.onHand}</p>
                     {renderProgressBar(item.onHand, item.reorderLevel)}
                   </div>
                 ))
@@ -394,16 +394,16 @@ export function MaterialRiskCenter({
           </Card>
 
           {/* Card 5: Warehouse Risk */}
-          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow">
+          <Card className="surface border border-border-soft flex flex-col justify-between hover:shadow-sm transition-shadow lg:col-span-3">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-text-primary uppercase tracking-wider font-semibold">Warehouse Risk</span>
                 <Boxes className="h-4 w-4 text-text-primary" />
               </div>
-              <CardTitle className="text-2xl font-black text-text-primary mt-1">
+              <CardTitle className="text-3xl font-black text-text-primary mt-1">
                 {risks.warehouseRisk.length}
               </CardTitle>
-              <p className="text-[10px] text-text-secondary mt-0.5">Capacities and localized alerts</p>
+              <p className="text-xs text-text-secondary mt-0.5">Capacities and localized alerts</p>
             </CardHeader>
             <CardContent className="space-y-3 pt-0 flex-grow">
               {risks.warehouseRisk.length === 0 ? (
@@ -412,13 +412,13 @@ export function MaterialRiskCenter({
                 risks.warehouseRisk.map((wh) => (
                   <div key={wh.name} className="border-t border-border-soft/60 pt-2 first:border-none first:pt-0">
                     <div className="flex items-start justify-between gap-1">
-                      <span className="font-semibold text-xs text-text-primary truncate max-w-[120px]">{wh.name}</span>
-                      <Badge tone="error" className="text-[8px] py-0 px-1">{wh.criticalCount} alerts</Badge>
+                      <span className="font-semibold text-xs text-text-primary truncate max-w-[180px] md:max-w-[220px]">{wh.name}</span>
+                      <Badge tone="error" className="text-[10px] px-1.5 py-0.5">{wh.criticalCount} alerts</Badge>
                     </div>
-                    <p className="text-[9px] text-text-secondary truncate">Critical index ratio: {wh.ratio}%</p>
+                    <p className="text-xs text-text-secondary truncate">Critical index ratio: {wh.ratio}%</p>
                     <div className="space-y-1 mt-2">
-                      <div className="h-1.5 w-full bg-hover rounded-full overflow-hidden">
-                        <div className="h-1.5 bg-error animate-pulse" style={{ width: `${wh.ratio}%` }} />
+                      <div className="h-2 w-full bg-hover rounded-full overflow-hidden">
+                        <div className="h-2 bg-error animate-pulse" style={{ width: `${wh.ratio}%` }} />
                       </div>
                     </div>
                   </div>

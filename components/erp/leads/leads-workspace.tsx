@@ -187,19 +187,19 @@ export function LeadsWorkspace() {
     } else if (actionKey === "schedule-high-value") {
       toast.info("Filtering pipeline for premium site visit setups...");
     } else {
-      toast.info(`Sales Intelligence Command executing action trigger: ${actionKey}`);
+      toast.info(`Sales performance command executing action trigger: ${actionKey}`);
     }
   };
 
   if (leadsQuery.isLoading || statsQuery.isLoading || projectsQuery.isLoading || usersQuery.isLoading) {
-    return <EnterprisePageLoader title="Sales Command Center" variant="dashboard" />;
+    return <EnterprisePageLoader title="Sales Operations Console" variant="dashboard" />;
   }
 
   return (
     <section className="space-y-6 pb-12">
       {/* Section 1: Hero header */}
       <SectionHeader
-        title="Sales Command Center"
+        title="Sales Operations Console"
         description="Monitor lead performance, sales pipeline health, conversion opportunities, site visit effectiveness, and revenue forecasting across all active projects."
         actions={
           <div className="flex flex-wrap items-center gap-2">
@@ -247,7 +247,7 @@ export function LeadsWorkspace() {
             >
               <span className="text-label flex items-center gap-1.5 text-white">
                 <Plus className="h-4 w-4" />
-                Add Lead
+                Register Lead
               </span>
             </Button>
           </div>

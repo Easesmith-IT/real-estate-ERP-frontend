@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 
+import { EnterprisePageLoader } from "@/components/ui/loaders";
+
 const publicPaths = ["/login"];
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
@@ -25,8 +27,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="flex h-dvh items-center justify-center bg-app">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-accent-primary/30 border-t-accent-primary" />
+      <div className="flex h-dvh items-center justify-center bg-app p-8">
+        <div className="w-full max-w-5xl">
+          <EnterprisePageLoader title="Verifying Enterprise Session..." variant="dashboard" />
+        </div>
       </div>
     );
   }

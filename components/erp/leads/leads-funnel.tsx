@@ -93,12 +93,12 @@ export function LeadsFunnel({ stageCounts, isLoading }: LeadsFunnelProps) {
         </Badge>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col xl:flex-row items-stretch justify-between gap-2.5 overflow-x-auto pb-2 min-w-[900px] xl:min-w-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {funnelData.map((stage, idx) => {
             const widthPct = Math.max(10, Math.round((stage.count / totalLeads) * 100));
 
             return (
-              <div key={stage.stage} className="flex-1 flex flex-row xl:flex-col items-center gap-2">
+              <div key={stage.stage} className="flex flex-col h-full">
                 <div className="flex-1 w-full bg-surface-secondary border border-border-soft rounded-[var(--radius-card)] pt-4 px-4 pb-6 flex flex-col justify-between space-y-4 hover:border-border-strong transition-all duration-150 relative overflow-hidden">
                   {/* Backdrop width bar */}
                   <div
@@ -148,12 +148,6 @@ export function LeadsFunnel({ stageCounts, isLoading }: LeadsFunnelProps) {
                     </div>
                   )}
                 </div>
-
-                {idx < funnelData.length - 1 && (
-                  <div className="flex xl:hidden items-center justify-center text-text-muted px-1">
-                    <ArrowRight className="h-5 w-5" />
-                  </div>
-                )}
               </div>
             );
           })}

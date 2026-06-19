@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { PayrollEmployeeSummary, PayrollResponse } from "@/types/payroll";
+import { EnterpriseTableLoader } from "@/components/ui/loaders";
 
 interface PayrollRegisterProps {
   data: PayrollResponse | undefined;
@@ -174,10 +175,7 @@ export function PayrollRegister({
       <CardContent className="px-0 pb-0 pt-0">
         <div className="overflow-auto">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20 space-y-3">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-accent-primary border-t-transparent" />
-              <p className="text-body text-text-muted">Loading employee payroll register...</p>
-            </div>
+            <EnterpriseTableLoader />
           ) : employees.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <p className="text-body font-semibold text-text-primary">No payroll records found</p>
@@ -295,7 +293,7 @@ export function PayrollRegister({
                       key={pageNumber}
                       variant={pagination.page === pageNumber ? "primary" : "outline"}
                       size="sm"
-                      className={`h-8 w-8 p-0 text-label font-medium ${
+                      className={`h-8 w-8 p-0 text-xs font-medium ${
                         pagination.page === pageNumber
                           ? ""
                           : "border-border-strong text-text-primary hover:bg-surface-secondary"

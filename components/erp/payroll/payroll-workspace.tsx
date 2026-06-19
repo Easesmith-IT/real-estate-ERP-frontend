@@ -84,7 +84,7 @@ export function PayrollWorkspace() {
             <Button
               variant="outline"
               size="sm"
-              className="text-label h-9 px-3.5 border-border-strong font-medium text-text-primary hover:bg-surface-secondary gap-1.5"
+              className="text-xs h-9 px-3.5 border-border-strong font-medium text-text-primary hover:bg-surface-secondary gap-1.5"
               onClick={handleOpenSettings}
             >
               <Settings className="h-4 w-4" />
@@ -93,7 +93,7 @@ export function PayrollWorkspace() {
             <Button
               variant="outline"
               size="sm"
-              className="text-label h-9 px-3.5 border-border-strong font-medium text-text-primary hover:bg-surface-secondary gap-1.5"
+              className="text-xs h-9 px-3.5 border-border-strong font-medium text-text-primary hover:bg-surface-secondary gap-1.5"
               onClick={handleGenerateReport}
             >
               <FileText className="h-4 w-4" />
@@ -102,7 +102,7 @@ export function PayrollWorkspace() {
             <Button
               variant="primary"
               size="sm"
-              className="text-label h-9 px-4 font-semibold gap-1.5"
+              className="text-xs h-9 px-4 font-semibold gap-1.5"
               onClick={handleExport}
             >
               <Download className="h-4 w-4" />
@@ -135,18 +135,11 @@ export function PayrollWorkspace() {
         onExport={handleExport}
       />
 
-      {/* Bottom Layout - Section 6, 7 & 8 */}
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        {/* Section 6: Breakdown Panel */}
-        <div className="xl:col-span-1">
-          <PayrollBreakdown data={payrollQuery.data} isLoading={payrollQuery.isLoading} />
-        </div>
+      {/* Section 6: Breakdown Panel */}
+      <PayrollBreakdown data={payrollQuery.data} isLoading={payrollQuery.isLoading} />
 
-        {/* Section 8: Productivity Matrix */}
-        <div className="xl:col-span-2">
-          <PayrollProductivity matrix={payrollQuery.data?.productivityMatrix} isLoading={payrollQuery.isLoading} />
-        </div>
-      </div>
+      {/* Section 8: Productivity Matrix */}
+      <PayrollProductivity matrix={payrollQuery.data?.productivityMatrix} isLoading={payrollQuery.isLoading} />
 
       {/* Section 7: Project Cost Overview */}
       <PayrollProjectCosts projectCosts={payrollQuery.data?.projectLaborCosts} isLoading={payrollQuery.isLoading} />

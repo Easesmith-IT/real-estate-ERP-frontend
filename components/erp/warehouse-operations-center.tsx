@@ -700,29 +700,33 @@ function InsightMetricCard({
   );
 }
 
-function RecommendationCard({ item }: { item: RecommendationCardData }) {
+function RecommendationCard({ item, className }: { item: RecommendationCardData; className?: string }) {
   return (
-    <Card className="border border-border-soft transition-all duration-200 hover:shadow-soft">
-      <CardContent className="space-y-4 p-5">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-card-title text-text-primary">{item.title}</p>
-          <Badge tone={item.tone}>
-            {item.tone === "error"
-              ? "Critical"
-              : item.tone === "warning"
-                ? "Warning"
-                : item.tone === "success"
-                  ? "Success"
-                  : item.tone === "info"
-                    ? "Information"
-                    : "Watch"}
-          </Badge>
+    <Card className={`border border-border-soft transition-all duration-200 hover:shadow-soft flex flex-col justify-between h-full ${className || ""}`}>
+      <CardContent className="space-y-4 p-5 flex flex-col justify-between h-full">
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-card-title text-text-primary text-base font-bold">{item.title}</p>
+            <Badge tone={item.tone}>
+              {item.tone === "error"
+                ? "Critical"
+                : item.tone === "warning"
+                  ? "Warning"
+                  : item.tone === "success"
+                    ? "Success"
+                    : item.tone === "info"
+                      ? "Information"
+                      : "Watch"}
+            </Badge>
+          </div>
+          <p className="text-body text-text-secondary mt-3 leading-relaxed">{item.description}</p>
         </div>
-        <p className="text-body text-text-secondary">{item.description}</p>
-        <Button variant="ghost" size="sm" className="px-0 text-accent-primary hover:bg-transparent hover:text-accent-primary">
-          {item.action}
-          <ArrowRight className="h-4 w-4" />
-        </Button>
+        <div className="pt-2">
+          <Button variant="ghost" size="sm" className="px-0 text-accent-primary hover:bg-transparent hover:text-accent-primary font-semibold">
+            <span>{item.action}</span>
+            <ArrowRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
@@ -1254,10 +1258,22 @@ export function WarehousesWorkspace() {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-5">
-        {recommendations.map((item) => (
-          <RecommendationCard key={item.title} item={item} />
-        ))}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-6">
+        {recommendations.map((item, index) => {
+          let colSpan = "lg:col-span-2";
+          if (recommendations.length === 5) {
+            colSpan = index < 3 ? "lg:col-span-2" : "lg:col-span-3";
+          } else if (recommendations.length === 4) {
+            colSpan = "lg:col-span-3";
+          }
+          return (
+            <RecommendationCard 
+              key={item.title} 
+              item={item} 
+              className={colSpan}
+            />
+          );
+        })}
       </div>
 
       <div id="warehouse-analytics-section" className="grid grid-cols-1 gap-6 xl:grid-cols-2">
@@ -1304,7 +1320,7 @@ export function WarehousesWorkspace() {
           </CardContent>
         </Card>
 
-        <Card className="border border-border-soft">
+        <Card className="border border-border-soft xl:col-span-2">
           <CardHeader>
             <CardTitle>Warehouse Stock Trend</CardTitle>
             <Badge tone="neutral">Last 30 Days</Badge>
@@ -1332,12 +1348,12 @@ export function WarehousesWorkspace() {
           </CardContent>
         </Card>
 
-        <Card className="border border-border-soft">
+        <Card className="border border-border-soft xl:col-span-2">
           <CardHeader>
             <CardTitle>Warehouse Health Matrix</CardTitle>
             <Badge tone="neutral">Interactive Scorecard Grid</Badge>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {matrixRows.slice(0, 8).map((row) => (
               <button
                 key={row.id}

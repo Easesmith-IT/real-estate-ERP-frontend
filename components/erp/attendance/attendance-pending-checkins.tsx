@@ -38,9 +38,19 @@ export function AttendancePendingCheckins({ pendingList, isLoading }: PendingChe
 
   if (isLoading) {
     return (
-      <div className="py-12 text-center text-text-secondary flex flex-col items-center justify-center gap-3">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        <p>Loading pending check-ins list...</p>
+      <div className="space-y-3 py-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex items-center justify-between p-4 rounded-xl border border-border-soft/60 shimmer-skeleton">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-hover" />
+              <div className="space-y-2">
+                <div className="h-4 w-32 rounded bg-hover" />
+                <div className="h-3.5 w-24 rounded bg-hover opacity-70" />
+              </div>
+            </div>
+            <div className="h-9 w-24 rounded bg-hover" />
+          </div>
+        ))}
       </div>
     );
   }

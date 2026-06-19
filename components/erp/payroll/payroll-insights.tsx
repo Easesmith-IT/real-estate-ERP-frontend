@@ -24,7 +24,7 @@ export function PayrollInsights({ recommendations, isLoading, onExecuteAction }:
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {Array.from({ length: 4 }).map((_, idx) => (
-            <div key={idx} className="h-24 animate-pulse rounded-[var(--radius-input)] bg-surface-secondary" />
+            <div key={idx} className="h-24 rounded-[var(--radius-input)] shimmer-skeleton" />
           ))}
         </CardContent>
       </Card>

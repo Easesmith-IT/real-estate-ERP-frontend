@@ -40,7 +40,9 @@ import {
   ChevronsLeft,
   ChevronLeft,
   ChevronRight,
-  ChevronsRight
+  ChevronsRight,
+  ChevronDown,
+  Trash2
 } from "lucide-react";
 
 import { useUiStore } from "@/store/ui-store";
@@ -150,6 +152,155 @@ export function StockManagementWorkspace() {
     notes: ""
   });
 
+  // Add Material Form State
+  const [addMaterialDrawerOpen, setAddMaterialDrawerOpen] = useState(false);
+  const [editingMaterialId, setEditingMaterialId] = useState<string | null>(null);
+  const [materialForm, setMaterialForm] = useState({
+    name: "",
+    sku: "",
+    category: "Cement",
+    subCategory: "",
+    warehouseId: "",
+    locationZone: "Zone A-1",
+    projectId: "",
+    onHand: "",
+    unit: "bags",
+    reorderLevel: "",
+    minStock: "",
+    maxStock: "",
+    averageConsumption: "",
+    supplier: "BuildCorp Industries",
+    unitCost: "",
+    leadTime: "3",
+    storageNotes: "Store in dry area.",
+    tags: "Cement, Core"
+  });
+
+  const resetMaterialForm = () => {
+    setEditingMaterialId(null);
+    setMaterialForm({
+      name: "",
+      sku: "",
+      category: "Cement",
+      subCategory: "",
+      warehouseId: materialsQuery.data?.warehouses?.[0]?.id || "",
+      locationZone: "Zone A-1",
+      projectId: projectsQuery.data?.projects?.[0]?.id || "",
+      onHand: "",
+      unit: "bags",
+      reorderLevel: "",
+      minStock: "",
+      maxStock: "",
+      averageConsumption: "",
+      supplier: "BuildCorp Industries",
+      unitCost: "",
+      leadTime: "3",
+      storageNotes: "Store in dry area.",
+      tags: "Cement, Core"
+    });
+  };
+
+  const saveMaterialMutation = useMutation({
+    mutationFn: async () =>
+      apiRequest(editingMaterialId ? `/api/materials/${editingMaterialId}` : "/api/materials", {
+        role,
+        method: editingMaterialId ? "PATCH" : "POST",
+        body: {
+          ...materialForm,
+          onHand: Number(materialForm.onHand) || 0,
+          reorderLevel: Number(materialForm.reorderLevel) || 0,
+          averageConsumption: Number(materialForm.averageConsumption) || 0,
+          unitCost: Number(materialForm.unitCost) || undefined,
+          leadTime: Number(materialForm.leadTime) || undefined,
+          minStock: Number(materialForm.minStock) || undefined,
+          maxStock: Number(materialForm.maxStock) || undefined
+        },
+      }),
+    onSuccess: async () => {
+      setAddMaterialDrawerOpen(false);
+      setEditingMaterialId(null);
+      resetMaterialForm();
+      toast.success(editingMaterialId ? "Material SKU updated successfully!" : "New material SKU added successfully!");
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["erp-materials"] }),
+      ]);
+    },
+    onError: () => {
+      toast.error(editingMaterialId ? "Failed to update material SKU." : "Failed to add new material. Please check input parameters.");
+    }
+  });
+
+  const archiveMaterialMutation = useMutation({
+    mutationFn: async (materialId: string) =>
+      apiRequest(`/api/materials/${materialId}`, {
+        role,
+        method: "PATCH",
+        body: { status: "Archived" }
+      }),
+    onSuccess: async () => {
+      toast.success("Material SKU archived successfully!");
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["erp-materials"] }),
+      ]);
+    },
+    onError: () => {
+      toast.error("Failed to archive material SKU.");
+    }
+  });
+
+  const handleEditMaterial = (material: Material) => {
+    setEditingMaterialId(material.id);
+    const ext = material as any;
+    setMaterialForm({
+      name: material.name,
+      sku: material.sku,
+      category: material.category,
+      subCategory: ext.subCategory || `${material.category} Grade A`,
+      warehouseId: material.warehouseId,
+      locationZone: ext.locationZone || "Zone A-1",
+      projectId: material.projectId,
+      onHand: String(material.onHand),
+      unit: material.unit,
+      reorderLevel: String(material.reorderLevel),
+      minStock: String(ext.minStock || Math.round(material.reorderLevel * 0.8)),
+      maxStock: String(ext.maxStock || Math.round(material.reorderLevel * 2.5)),
+      averageConsumption: String(material.averageConsumption),
+      supplier: ext.supplier || "BuildCorp Industries",
+      unitCost: String(ext.unitCost || 450),
+      leadTime: String(ext.leadTime || 3),
+      storageNotes: ext.storageNotes || "Store in dry area.",
+      tags: ext.tags || `${material.category}, Core`
+    });
+    setAddMaterialDrawerOpen(true);
+  };
+
+  const handleAddMaterialSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!materialForm.name.trim() || !materialForm.sku.trim()) {
+      toast.error("Material Name and SKU Code are required.");
+      return;
+    }
+    saveMaterialMutation.mutate();
+  };
+
+  // Live calculations for CRUD side-panel
+  const liveOnHand = Number(materialForm.onHand) || 0;
+  const liveUnitCost = Number(materialForm.unitCost) || 0;
+  const liveValue = liveOnHand * liveUnitCost;
+  const liveReorder = Number(materialForm.reorderLevel) || 1;
+  const liveAvgCons = Number(materialForm.averageConsumption) || 1;
+
+  let liveHealth = "Healthy";
+  if (liveOnHand === 0 || liveOnHand <= liveReorder * 0.25) liveHealth = "Critical";
+  else if (liveOnHand <= liveReorder) liveHealth = "Low Stock";
+
+  const liveDays = Math.round(liveOnHand / liveAvgCons);
+  const liveReorderDate = new Date();
+  liveReorderDate.setDate(liveReorderDate.getDate() + liveDays);
+  const formattedLiveReorderDate = liveOnHand > 0 && liveAvgCons > 0 
+    ? liveReorderDate.toLocaleDateString("en-IN", { day: "numeric", month: "short" }) 
+    : "Immediate";
+
   // Filter toolbar state
   const [searchValue, setSearchValue] = useState("");
   const [typeFilter, setTypeFilter] = useState("ALL");
@@ -157,7 +308,8 @@ export function StockManagementWorkspace() {
   const [warehouseFilter, setWarehouseFilter] = useState("ALL");
   const [projectFilter, setProjectFilter] = useState("ALL");
   const [materialFilter, setMaterialFilter] = useState("ALL");
-  const [activeTab, setActiveTab] = useState<"ALL" | "IN" | "OUT" | "TRANSFER" | "PENDING" | "CONSUMPTION">("ALL");
+  const [categoryFilter, setCategoryFilter] = useState("ALL");
+  const [activeTab, setActiveTab] = useState<"ALL" | "IN" | "OUT" | "TRANSFER" | "PENDING" | "CONSUMPTION" | "CATALOG">("ALL");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -176,7 +328,7 @@ export function StockManagementWorkspace() {
   // Reset page on filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchValue, typeFilter, statusFilter, warehouseFilter, projectFilter, materialFilter, activeTab]);
+  }, [searchValue, typeFilter, statusFilter, warehouseFilter, projectFilter, materialFilter, categoryFilter, activeTab]);
 
   // Fetch core ERP modules
   const materialsQuery = useQuery({
@@ -242,12 +394,20 @@ export function StockManagementWorkspace() {
         fromWarehouseId: prev.fromWarehouseId || firstMat.warehouseId,
         toWarehouseId: prev.toWarehouseId || (materialsQuery.data?.warehouses?.find(w => w.id !== firstMat.warehouseId)?.id || firstMat.warehouseId)
       }));
+      setMaterialForm(prev => ({
+        ...prev,
+        warehouseId: prev.warehouseId || firstMat.warehouseId
+      }));
     }
     if (vendorsQuery.data?.vendors?.length) {
       setStockInForm(prev => ({ ...prev, vendorId: prev.vendorId || vendorsQuery.data.vendors[0].id }));
     }
     if (projectsQuery.data?.projects?.length) {
       setStockOutForm(prev => ({ ...prev, projectId: prev.projectId || projectsQuery.data.projects[0].id }));
+      setMaterialForm(prev => ({
+        ...prev,
+        projectId: prev.projectId || projectsQuery.data.projects[0].id
+      }));
     }
   }, [materialsQuery.data, vendorsQuery.data, projectsQuery.data]);
 
@@ -546,7 +706,46 @@ export function StockManagementWorkspace() {
     });
   }, [isLoading, isError, consumptionQuery.data, materialsQuery.data, searchValue, warehouseFilter, projectFilter, materialFilter]);
 
-  const totalFiltered = activeTab === "CONSUMPTION" ? filteredConsumptions.length : filteredMovements.length;
+  const filteredMaterials = useMemo(() => {
+    if (isLoading || isError) return [];
+    const mats = materialsQuery.data?.materials || [];
+    return mats.filter((m) => {
+      if (m.status === "Archived") return false;
+
+      if (searchValue.trim()) {
+        const term = searchValue.toLowerCase();
+        const matchesSearch =
+          m.name.toLowerCase().includes(term) ||
+          m.sku.toLowerCase().includes(term) ||
+          m.category.toLowerCase().includes(term) ||
+          m.warehouseName.toLowerCase().includes(term) ||
+          m.projectName.toLowerCase().includes(term);
+        if (!matchesSearch) return false;
+      }
+
+      if (categoryFilter !== "ALL" && m.category !== categoryFilter) return false;
+      if (warehouseFilter !== "ALL" && m.warehouseName !== warehouseFilter) return false;
+      if (projectFilter !== "ALL" && m.projectName !== projectFilter) return false;
+
+      // Status filter
+      const isLow = m.status === "Low Stock" || m.onHand <= m.reorderLevel;
+      const isCritical = m.onHand <= m.reorderLevel * 0.25 || m.onHand === 0;
+      let matStatus = "Healthy";
+      if (isCritical) matStatus = "Critical";
+      else if (isLow) matStatus = "Low Stock";
+
+      if (statusFilter !== "ALL" && matStatus !== statusFilter) return false;
+
+      return true;
+    });
+  }, [materialsQuery.data, searchValue, warehouseFilter, projectFilter, categoryFilter, statusFilter, isLoading, isError]);
+
+  const totalFiltered =
+    activeTab === "CONSUMPTION"
+      ? filteredConsumptions.length
+      : activeTab === "CATALOG"
+      ? filteredMaterials.length
+      : filteredMovements.length;
   const totalPages = Math.max(1, Math.ceil(totalFiltered / rowsPerPage));
   const startIndex = (currentPage - 1) * rowsPerPage;
 
@@ -557,6 +756,10 @@ export function StockManagementWorkspace() {
   const pagedConsumptions = useMemo(() => {
     return filteredConsumptions.slice(startIndex, startIndex + rowsPerPage);
   }, [filteredConsumptions, startIndex, rowsPerPage]);
+
+  const pagedMaterials = useMemo(() => {
+    return filteredMaterials.slice(startIndex, startIndex + rowsPerPage);
+  }, [filteredMaterials, startIndex, rowsPerPage]);
 
   const consumptionStats = useMemo(() => {
     const consumptions = consumptionQuery.data?.consumptions || [];
@@ -831,6 +1034,15 @@ export function StockManagementWorkspace() {
           </Button>
           <Button variant="outline" size="sm" onClick={() => toast.info("Selecting Date Range...")}>
             <Calendar className="h-4 w-4" /> Last 30 Days
+          </Button>
+          <Button
+            onClick={() => {
+              resetMaterialForm();
+              setAddMaterialDrawerOpen(true);
+            }}
+            className="bg-accent-primary hover:bg-accent-primary-hover text-white font-semibold gap-1.5"
+          >
+            <PackagePlus className="h-4 w-4" /> Add Material
           </Button>
           <Button
             onClick={() => {
@@ -1371,6 +1583,13 @@ export function StockManagementWorkspace() {
             <span>Pending & In Transit</span>
             <Badge tone="warning" className="px-1.5 py-0">{allMovements.filter(m => m.status === "Pending" || m.status === "In Transit").length}</Badge>
           </button>
+          <button
+            onClick={() => setActiveTab("CATALOG")}
+            className={`flex items-center gap-2 border-b-2 py-3 px-1 text-body font-bold transition-all shrink-0 ${activeTab === "CATALOG" ? "border-accent-primary text-accent-primary" : "border-transparent text-text-secondary hover:text-text-primary"}`}
+          >
+            <span>Material Catalog</span>
+            <Badge tone="neutral" className="px-1.5 py-0">{materialsQuery.data?.materials?.length || 0}</Badge>
+          </button>
         </div>
       </div>
 
@@ -1382,33 +1601,62 @@ export function StockManagementWorkspace() {
             <Input
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search by material, SKU, PO reference, warehouse, project..."
+              placeholder={activeTab === "CATALOG" ? "Search by material, SKU, category, warehouse, project..." : "Search by material, SKU, PO reference, warehouse, project..."}
               className="h-12 rounded-[20px] border-white/70 bg-white pl-10 shadow-soft"
             />
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="h-10 rounded-lg border border-border-soft bg-white px-3 text-label text-text-primary focus:outline-none shadow-soft"
-            >
-              <option value="ALL">All Types</option>
-              <option value="Stock In">Stock In</option>
-              <option value="Stock Out">Stock Out</option>
-              <option value="Transfer">Transfer</option>
-            </select>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-10 rounded-lg border border-border-soft bg-white px-3 text-label text-text-primary focus:outline-none shadow-soft"
-            >
-              <option value="ALL">All Statuses</option>
-              <option value="Completed">Completed</option>
-              <option value="Received">Received</option>
-              <option value="Pending">Pending</option>
-              <option value="In Transit">In Transit</option>
-            </select>
-            {(searchValue || typeFilter !== "ALL" || statusFilter !== "ALL" || warehouseFilter !== "ALL" || projectFilter !== "ALL" || materialFilter !== "ALL") && (
+            {activeTab === "CATALOG" ? (
+              <>
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="h-10 rounded-lg border border-border-soft bg-white px-3 text-label text-text-primary focus:outline-none shadow-soft"
+                >
+                  <option value="ALL">All Categories</option>
+                  <option value="Cement">Cement</option>
+                  <option value="Steel">Steel</option>
+                  <option value="Electrical">Electrical</option>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Finishing">Finishing</option>
+                </select>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="h-10 rounded-lg border border-border-soft bg-white px-3 text-label text-text-primary focus:outline-none shadow-soft"
+                >
+                  <option value="ALL">All Statuses</option>
+                  <option value="Healthy">Healthy</option>
+                  <option value="Low Stock">Low Stock</option>
+                  <option value="Critical">Critical</option>
+                </select>
+              </>
+            ) : (
+              <>
+                <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="h-10 rounded-lg border border-border-soft bg-white px-3 text-label text-text-primary focus:outline-none shadow-soft"
+                >
+                  <option value="ALL">All Types</option>
+                  <option value="Stock In">Stock In</option>
+                  <option value="Stock Out">Stock Out</option>
+                  <option value="Transfer">Transfer</option>
+                </select>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="h-10 rounded-lg border border-border-soft bg-white px-3 text-label text-text-primary focus:outline-none shadow-soft"
+                >
+                  <option value="ALL">All Statuses</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Received">Received</option>
+                  <option value="Pending">Pending</option>
+                  <option value="In Transit">In Transit</option>
+                </select>
+              </>
+            )}
+            {(searchValue || typeFilter !== "ALL" || statusFilter !== "ALL" || warehouseFilter !== "ALL" || projectFilter !== "ALL" || materialFilter !== "ALL" || categoryFilter !== "ALL") && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -1419,7 +1667,10 @@ export function StockManagementWorkspace() {
                   setWarehouseFilter("ALL");
                   setProjectFilter("ALL");
                   setMaterialFilter("ALL");
-                  setActiveTab("ALL");
+                  setCategoryFilter("ALL");
+                  if (activeTab !== "CATALOG") {
+                    setActiveTab("ALL");
+                  }
                 }}
                 className="text-text-muted hover:text-text-primary"
               >
@@ -1437,8 +1688,8 @@ export function StockManagementWorkspace() {
             className="h-9 rounded-lg border border-border-soft bg-white px-2.5 text-label text-text-muted focus:outline-none"
           >
             <option value="ALL">All Warehouses</option>
-            {filterOptions.warehouses.map((w) => (
-              <option key={w} value={w}>{w}</option>
+            {materialsQuery.data?.warehouses?.map((w) => (
+              <option key={w.id} value={w.name}>{w.name}</option>
             ))}
           </select>
           <select
@@ -1447,56 +1698,88 @@ export function StockManagementWorkspace() {
             className="h-9 rounded-lg border border-border-soft bg-white px-2.5 text-label text-text-muted focus:outline-none"
           >
             <option value="ALL">All Projects</option>
-            {filterOptions.projects.map((p) => (
-              <option key={p} value={p}>{p}</option>
+            {projectsQuery.data?.projects?.map((p) => (
+              <option key={p.id} value={p.name}>{p.name}</option>
             ))}
           </select>
-          <select
-            value={materialFilter}
-            onChange={(e) => setMaterialFilter(e.target.value)}
-            className="h-9 rounded-lg border border-border-soft bg-white px-2.5 text-label text-text-muted focus:outline-none"
-          >
-            <option value="ALL">All Materials</option>
-            {filterOptions.materials.map((m) => (
-              <option key={m} value={m}>{m}</option>
-            ))}
-          </select>
+          {activeTab !== "CATALOG" && (
+            <select
+              value={materialFilter}
+              onChange={(e) => setMaterialFilter(e.target.value)}
+              className="h-9 rounded-lg border border-border-soft bg-white px-2.5 text-label text-text-muted focus:outline-none"
+            >
+              <option value="ALL">All Materials</option>
+              {filterOptions.materials.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+          )}
 
           {/* Quick Filters */}
           <div className="flex items-center gap-1.5 ml-auto">
             <span className="text-label text-text-muted mr-1.5">Quick Filters:</span>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
-              onClick={() => { setStatusFilter("In Transit"); setTypeFilter("Transfer"); }}
-            >
-              In Transit
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
-              onClick={() => { setStatusFilter("Pending"); }}
-            >
-              Pending Approval
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
-              onClick={() => {
-                // filter movements with quantity > 200
-                const large = allMovements.find(m => m.quantityNum >= 200);
-                if (large) {
-                  setSearchValue(large.materialName);
-                } else {
-                  toast.info("No large movements (200+ units) in recent history");
-                }
-              }}
-            >
-              Large Movements
-            </Button>
+            {activeTab === "CATALOG" ? (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
+                  onClick={() => { setStatusFilter("Low Stock"); }}
+                >
+                  Low Stock
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
+                  onClick={() => { setStatusFilter("Critical"); }}
+                >
+                  Critical Stock
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
+                  onClick={() => { setStatusFilter("Healthy"); }}
+                >
+                  Healthy Stock
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
+                  onClick={() => { setStatusFilter("In Transit"); setTypeFilter("Transfer"); }}
+                >
+                  In Transit
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
+                  onClick={() => { setStatusFilter("Pending"); }}
+                >
+                  Pending Approval
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 rounded-full text-label border-border-soft bg-white hover:bg-hover px-3 py-1 font-semibold"
+                  onClick={() => {
+                    const large = allMovements.find(m => m.quantityNum >= 200);
+                    if (large) {
+                      setSearchValue(large.materialName);
+                    } else {
+                      toast.info("No large movements (200+ units) in recent history");
+                    }
+                  }}
+                >
+                  Large Movements
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -1516,6 +1799,18 @@ export function StockManagementWorkspace() {
                     <th className="px-4 text-left font-bold">Purpose</th>
                     <th className="px-4 text-left font-bold w-[160px]">Recorded By</th>
                     <th className="px-4 text-center font-bold w-[100px]">Actions</th>
+                  </tr>
+                ) : activeTab === "CATALOG" ? (
+                  <tr className="h-12">
+                    <th className="px-5 text-left font-bold w-[120px]">SKU</th>
+                    <th className="px-4 text-left font-bold">Material Name</th>
+                    <th className="px-4 text-left font-bold w-[130px]">Category</th>
+                    <th className="px-4 text-left font-bold">Warehouse</th>
+                    <th className="px-4 text-left font-bold">Project Allocation</th>
+                    <th className="px-4 text-left font-bold w-[120px]">On Hand</th>
+                    <th className="px-4 text-left font-bold w-[110px]">Reorder Pt</th>
+                    <th className="px-4 text-left font-bold w-[110px]">Status</th>
+                    <th className="px-4 text-center font-bold w-[280px]">Actions</th>
                   </tr>
                 ) : (
                   <tr className="h-12">
@@ -1612,6 +1907,83 @@ export function StockManagementWorkspace() {
                                 }}
                               >
                                 <Eye className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )
+                ) : activeTab === "CATALOG" ? (
+                  filteredMaterials.length === 0 ? (
+                    <TableEmptyStateRow colSpan={9} title="No Materials Found" description="Try adjusting your filter settings or search terms." />
+                  ) : (
+                    pagedMaterials.map((m) => {
+                      const isLow = m.status === "Low Stock" || m.onHand <= m.reorderLevel;
+                      const isCritical = m.onHand <= m.reorderLevel * 0.25 || m.onHand === 0;
+                      let statusBadge = <Badge tone="success">Healthy</Badge>;
+                      if (isCritical) {
+                        statusBadge = <Badge tone="error">Critical</Badge>;
+                      } else if (isLow) {
+                        statusBadge = <Badge tone="warning">Low Stock</Badge>;
+                      }
+
+                      return (
+                        <tr
+                          key={m.id}
+                          className="group border-t border-border-soft hover:bg-hover/40 transition-all cursor-pointer"
+                        >
+                          <td className="px-5 py-4 font-mono text-label text-text-muted whitespace-nowrap">{m.sku}</td>
+                          <td className="px-4 py-4 font-bold text-text-primary">{m.name}</td>
+                          <td className="px-4 py-4 text-text-secondary">{m.category}</td>
+                          <td className="px-4 py-4 text-text-secondary">{m.warehouseName}</td>
+                          <td className="px-4 py-4 text-text-secondary">{m.projectName}</td>
+                          <td className="px-4 py-4 font-bold text-text-primary">{m.onHand} {m.unit}</td>
+                          <td className="px-4 py-4 text-text-muted">{m.reorderLevel} {m.unit}</td>
+                          <td className="px-4 py-4">{statusBadge}</td>
+                          <td className="px-4 py-4 text-center" onClick={(e) => e.stopPropagation()}>
+                            <div className="flex items-center justify-center gap-1.5">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2 text-xs font-semibold"
+                                onClick={() => handleEditMaterial(m)}
+                              >
+                                <Edit className="h-3.5 w-3.5 mr-1 text-accent-primary" /> Edit
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 px-2 text-xs font-semibold text-error hover:text-error hover:bg-error/5"
+                                onClick={() => {
+                                  if (confirm(`Are you sure you want to archive ${m.name}?`)) {
+                                    archiveMaterialMutation.mutate(m.id);
+                                  }
+                                }}
+                              >
+                                <Trash2 className="h-3.5 w-3.5 mr-1" /> Archive
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 px-2 text-xs font-semibold border-success/35 text-success hover:bg-success/5 animate-all"
+                                onClick={() => {
+                                  setStockInForm((prev) => ({ ...prev, materialId: m.id }));
+                                  setStockInDrawerOpen(true);
+                                }}
+                              >
+                                In
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 px-2 text-xs font-semibold border-error/35 text-error hover:bg-error/5 animate-all"
+                                onClick={() => {
+                                  setStockOutForm((prev) => ({ ...prev, materialId: m.id }));
+                                  setStockOutDrawerOpen(true);
+                                }}
+                              >
+                                Out
                               </Button>
                             </div>
                           </td>
@@ -1728,7 +2100,7 @@ export function StockManagementWorkspace() {
           {totalPages > 1 && (
             <div className="p-4 border-t border-border-soft flex flex-wrap items-center justify-between gap-3 bg-surface-secondary/25">
               <span className="text-xs text-text-muted font-medium">
-                Showing {startIndex + 1} - {Math.min(startIndex + rowsPerPage, totalFiltered)} of {totalFiltered} {activeTab === "CONSUMPTION" ? "Consumptions" : "Movements"}
+                Showing {startIndex + 1} - {Math.min(startIndex + rowsPerPage, totalFiltered)} of {totalFiltered} {activeTab === "CONSUMPTION" ? "Consumptions" : activeTab === "CATALOG" ? "Materials" : "Movements"}
               </span>
               
               <div className="flex items-center gap-1.5">
@@ -2514,6 +2886,336 @@ export function StockManagementWorkspace() {
             >
               Initiate Stock Transfer
             </Button>
+          </div>
+        </form>
+      </Drawer>
+
+      {/* SECTION 12: ADD MATERIAL XL DRAWER (CRUD) */}
+      <Drawer
+        open={addMaterialDrawerOpen}
+        size="xl"
+        onClose={() => {
+          setAddMaterialDrawerOpen(false);
+          resetMaterialForm();
+        }}
+        title={editingMaterialId ? "Modify Material Item" : "Create New Material SKU"}
+      >
+        <form onSubmit={handleAddMaterialSubmit} className="grid grid-cols-1 gap-6 lg:grid-cols-[2.2fr_1fr] pb-12">
+          <div className="space-y-6">
+            
+            {/* Section 1: Material Information */}
+            <div className="space-y-4 rounded-[var(--radius-card)] border border-border-soft p-5 bg-surface-secondary/20 shadow-soft">
+              <h3 className="text-body font-semibold text-text-primary border-b border-border-soft pb-2 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-primary" />
+                Material Information
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Material Name *</label>
+                  <Input
+                    value={materialForm.name}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, name: e.target.value }))}
+                    placeholder="e.g. Steel TMT 16mm"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">SKU / Code *</label>
+                  <Input
+                    value={materialForm.sku}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, sku: e.target.value }))}
+                    placeholder="e.g. STL-TMT-16"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Category</label>
+                  <div className="relative">
+                    <select
+                      value={materialForm.category}
+                      onChange={(e) => setMaterialForm((prev) => ({ ...prev, category: e.target.value }))}
+                      className={selectClassName}
+                    >
+                      <option value="Cement">Cement</option>
+                      <option value="Steel">Steel</option>
+                      <option value="Electrical">Electrical</option>
+                      <option value="Plumbing">Plumbing</option>
+                      <option value="Finishing">Finishing</option>
+                    </select>
+                    <ChevronDown className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-secondary pointer-events-none" />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Sub Category</label>
+                  <Input
+                    value={materialForm.subCategory}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, subCategory: e.target.value }))}
+                    placeholder="e.g. Grade 500"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Unit</label>
+                  <Input
+                    value={materialForm.unit}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, unit: e.target.value }))}
+                    placeholder="e.g. bags, kg, meters"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2: Warehouse & Site Allocation */}
+            <div className="space-y-4 rounded-[var(--radius-card)] border border-border-soft p-5 bg-surface-secondary/20 shadow-soft">
+              <h3 className="text-body font-semibold text-text-primary border-b border-border-soft pb-2 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-primary" />
+                Warehouse & Site Allocation
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Warehouse</label>
+                  <div className="relative">
+                    <select
+                      value={materialForm.warehouseId}
+                      onChange={(e) => setMaterialForm((prev) => ({ ...prev, warehouseId: e.target.value }))}
+                      className={selectClassName}
+                    >
+                      {(materialsQuery.data?.warehouses || []).map((w) => (
+                        <option key={w.id} value={w.id}>{w.name}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-secondary pointer-events-none" />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Location Zone</label>
+                  <Input
+                    value={materialForm.locationZone}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, locationZone: e.target.value }))}
+                    placeholder="e.g. Rack B-3"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Allocated Project</label>
+                  <div className="relative">
+                    <select
+                      value={materialForm.projectId}
+                      onChange={(e) => setMaterialForm((prev) => ({ ...prev, projectId: e.target.value }))}
+                      className={selectClassName}
+                    >
+                      {(projectsQuery.data?.projects || []).map((p) => (
+                        <option key={p.id} value={p.id}>{p.name}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-secondary pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3: Stock Levels & Unit Cost */}
+            <div className="space-y-4 rounded-[var(--radius-card)] border border-border-soft p-5 bg-surface-secondary/20 shadow-soft">
+              <h3 className="text-body font-semibold text-text-primary border-b border-border-soft pb-2 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-primary" />
+                Stock Levels & Unit Cost
+              </h3>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">On Hand Qty</label>
+                  <Input
+                    type="number"
+                    value={materialForm.onHand}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, onHand: e.target.value }))}
+                    placeholder="e.g. 500"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Reorder Pt</label>
+                  <Input
+                    type="number"
+                    value={materialForm.reorderLevel}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, reorderLevel: e.target.value }))}
+                    placeholder="e.g. 100"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Min Stock</label>
+                  <Input
+                    type="number"
+                    value={materialForm.minStock}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, minStock: e.target.value }))}
+                    placeholder="e.g. 50"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Max Stock</label>
+                  <Input
+                    type="number"
+                    value={materialForm.maxStock}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, maxStock: e.target.value }))}
+                    placeholder="e.g. 2000"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Avg Daily Consumption</label>
+                  <Input
+                    type="number"
+                    value={materialForm.averageConsumption}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, averageConsumption: e.target.value }))}
+                    placeholder="e.g. 15"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Unit Cost (₹)</label>
+                  <Input
+                    type="number"
+                    value={materialForm.unitCost}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, unitCost: e.target.value }))}
+                    placeholder="e.g. 450"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Lead Time (Days)</label>
+                  <Input
+                    type="number"
+                    value={materialForm.leadTime}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, leadTime: e.target.value }))}
+                    placeholder="e.g. 3"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 4: Supplier & Notes */}
+            <div className="space-y-4 rounded-[var(--radius-card)] border border-border-soft p-5 bg-surface-secondary/20 shadow-soft">
+              <h3 className="text-body font-semibold text-text-primary border-b border-border-soft pb-2 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-primary" />
+                Supplier & Notes
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Supplier Name</label>
+                  <Input
+                    value={materialForm.supplier}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, supplier: e.target.value }))}
+                    placeholder="e.g. BuildCorp Steel"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-label text-text-secondary font-medium">Tags</label>
+                  <Input
+                    value={materialForm.tags}
+                    onChange={(e) => setMaterialForm((prev) => ({ ...prev, tags: e.target.value }))}
+                    placeholder="e.g. Cement, High Strength"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-label text-text-secondary font-medium">Storage Notes</label>
+                <textarea
+                  value={materialForm.storageNotes}
+                  onChange={(e) => setMaterialForm((prev) => ({ ...prev, storageNotes: e.target.value }))}
+                  className="min-h-[80px] w-full rounded-[var(--radius-input)] border border-border-soft bg-surface px-4 py-2.5 text-body text-text-primary shadow-soft focus-visible:outline-none focus-visible:shadow-[0_0_0_3px_rgb(37_99_235_/_0.22)] placeholder:text-text-muted transition-all"
+                  placeholder="e.g. Store in elevated area to avoid humidity..."
+                  rows={2}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-4 border-t border-border-soft">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setAddMaterialDrawerOpen(false);
+                  resetMaterialForm();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                loading={saveMaterialMutation.isPending}
+                className="font-semibold"
+              >
+                {editingMaterialId ? "Save SKU" : "Add SKU"}
+              </Button>
+            </div>
+
+          </div>
+
+          <div className="sticky top-0 bg-surface-secondary/50 border border-border-soft rounded-[var(--radius-card)] p-5 space-y-6 self-start shadow-soft">
+            <h3 className="text-body font-semibold text-text-primary pb-2 border-b border-border-soft flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-accent-primary" />
+              Live Stock Summary
+            </h3>
+            <div className="space-y-5 text-body">
+              <div className="rounded-[var(--radius-card)] bg-surface border border-border-soft p-4 shadow-soft">
+                <p className="text-label text-text-secondary uppercase tracking-wider font-medium">Estimated Valuation</p>
+                <p className="text-2xl font-black text-text-primary mt-1.5">
+                  ₹{liveValue >= 100000 
+                    ? `${(liveValue / 100000).toFixed(2)} Lakhs` 
+                    : liveValue.toLocaleString("en-IN")}
+                </p>
+                <span className="text-label text-text-muted block mt-1">Based on ₹{liveUnitCost || 0} / {materialForm.unit || "unit"}</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 rounded-[var(--radius-card)] bg-surface border border-border-soft p-4 shadow-soft">
+                <div>
+                  <span className="text-label text-text-secondary block font-medium">Stock Status</span>
+                  <div className="mt-1.5">
+                    <Badge 
+                      tone={liveHealth === "Critical" ? "error" : liveHealth === "Low Stock" ? "warning" : "success"}
+                      className="font-semibold text-xs py-0.5 px-2"
+                    >
+                      {liveHealth}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-label text-text-secondary block font-medium">Lead Time</span>
+                  <p className="font-semibold text-text-primary mt-1 text-sm">{materialForm.leadTime || 3} Days</p>
+                </div>
+              </div>
+
+              <div className="rounded-[var(--radius-card)] bg-surface border border-border-soft p-4 space-y-2 shadow-soft">
+                <div className="flex items-center justify-between">
+                  <span className="text-label text-text-secondary font-medium">Expected Runway:</span>
+                  <span className="font-bold text-text-primary">
+                    {liveAvgCons > 0 ? `${liveDays} Days` : "Stable"}
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-hover rounded-full overflow-hidden mt-1.5">
+                  <div
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      liveDays <= 5 ? "bg-error" : liveDays <= 18 ? "bg-warning" : "bg-success"
+                    }`}
+                    style={{ width: `${Math.min(100, Math.max(5, (liveOnHand / (liveReorder * 2.2 || 1)) * 100))}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="bg-surface border border-border-soft rounded-[var(--radius-card)] p-4 space-y-2.5 shadow-soft text-xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-text-secondary">Reorder Date:</span>
+                  <span className="font-semibold text-text-primary text-right">{formattedLiveReorderDate}</span>
+                </div>
+                <div className="h-[1px] bg-border-soft" />
+                <div className="flex justify-between items-center">
+                  <span className="text-text-secondary">Capacity Occupied:</span>
+                  <span className="font-semibold text-text-primary text-right">
+                    {materialForm.maxStock ? `${Math.round((liveOnHand / Number(materialForm.maxStock)) * 100)}%` : "0%"}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </form>
       </Drawer>

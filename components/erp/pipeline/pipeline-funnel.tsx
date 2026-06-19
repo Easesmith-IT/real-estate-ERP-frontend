@@ -3,9 +3,10 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, TrendingDown, Users, Coins } from "lucide-react";
+import { ArrowRight, TrendingDown, Coins } from "lucide-react";
 
 interface PipelineFunnelProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   leads: any[];
 }
 
@@ -102,12 +103,12 @@ export function PipelineFunnel({ leads }: PipelineFunnelProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col xl:flex-row items-stretch justify-between gap-3 overflow-x-auto pb-4 min-w-[1000px] xl:min-w-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {funnelData.map((stage, idx) => {
             const widthPct = Math.max(12, Math.round((stage.count / (totalBase || 1)) * 100));
 
             return (
-              <div key={stage.id} className="flex-1 flex flex-row xl:flex-col items-center gap-2">
+              <div key={stage.id} className="flex flex-col h-full">
                 <div className="flex-1 w-full bg-surface-secondary border border-border-soft rounded-[var(--radius-card)] pt-4 px-4 pb-7 flex flex-col justify-between space-y-4 hover:border-border-strong transition-all duration-150 relative overflow-hidden">
                   {/* Backdrop indicator */}
                   <div
@@ -164,12 +165,6 @@ export function PipelineFunnel({ leads }: PipelineFunnelProps) {
                     )}
                   </div>
                 </div>
-
-                {idx < funnelData.length - 1 && (
-                  <div className="flex xl:hidden items-center justify-center text-text-muted px-1">
-                    <ArrowRight className="h-5 w-5" />
-                  </div>
-                )}
               </div>
             );
           })}

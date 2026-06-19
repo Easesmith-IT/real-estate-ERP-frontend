@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   BriefcaseBusiness,
@@ -159,6 +160,7 @@ function parseCsv(text: string) {
 
 export function EmployeeList() {
   const role = useUiStore((state) => state.role);
+  const router = useRouter();
   const queryClient = useQueryClient();
   const importInputRef = useRef<HTMLInputElement>(null);
   const employeesQuery = useQuery({
@@ -188,6 +190,7 @@ export function EmployeeList() {
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [importMessage, setImportMessage] = useState<string | null>(null);
   const [isImporting, setIsImporting] = useState(false);
+  const [now] = useState(() => Date.now());
 
   const saveMutation = useMutation({
     mutationFn: async () =>
@@ -224,6 +227,7 @@ export function EmployeeList() {
   });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [searchValue, statusFilter, departmentFilter, projectFilter, teamFilter, rowsPerPage]);
 
@@ -265,7 +269,7 @@ export function EmployeeList() {
   const activeTeams = new Set(employees.filter((employee) => employee.status === "Active").map((employee) => employee.teamName)).size;
   const staffedProjects = new Set(employees.filter((employee) => employee.status !== "Inactive").map((employee) => employee.projectId)).size;
   const newJoiners = employees.filter(
-    (employee) => Date.now() - new Date(employee.dateJoined).getTime() <= 30 * 24 * 60 * 60 * 1000,
+    (employee) => now - new Date(employee.dateJoined).getTime() <= 30 * 24 * 60 * 60 * 1000,
   ).length;
   const averageUtilization = employees.length
     ? Math.round(
@@ -633,12 +637,20 @@ export function EmployeeList() {
               <tbody>
                 {paginatedEmployees.length ? (
                   paginatedEmployees.map((employee) => (
-                    <tr key={employee.id} className="border-t border-border-soft hover:bg-hover/30">
+                    <tr
+                      key={employee.id}
+                      className="border-t border-border-soft hover:bg-hover/30 cursor-pointer"
+                      onClick={() => router.push(`/people/employees/${employee.id}`)}
+                    >
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-3">
                           <Avatar name={employee.name} />
                           <div className="space-y-1">
-                            <Link href={`/people/employees/${employee.id}`} className="font-medium text-text-primary hover:text-accent-primary">
+                            <Link
+                              href={`/people/employees/${employee.id}`}
+                              className="font-medium text-text-primary hover:text-accent-primary"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               {employee.name}
                             </Link>
                             <p className="text-label text-text-muted">{employee.email}</p>
@@ -685,7 +697,7 @@ export function EmployeeList() {
                       <td className="px-4 py-4">
                         <Badge tone={toneForStatus(employee.status)}>{employee.status}</Badge>
                       </td>
-                      <td className="px-4 py-4">
+                      <td className="px-4 py-4" onClick={(e) => e.stopPropagation()}>
                         <div className="flex flex-wrap items-center gap-2">
                           <Link href={`/people/employees/${employee.id}`}>
                             <Button variant="ghost" size="sm">View</Button>

@@ -380,11 +380,11 @@ export function FinancialOverviewWorkspace() {
 
   // Handle loading and error states (unconditional hooks must be called BEFORE this)
   if (financialQuery.isLoading || bookingsQuery.isLoading) {
-    return <LoadingStateCard title="Loading Financial Intelligence Center" />;
+    return <LoadingStateCard title="Loading Financial Performance Center" />;
   }
 
   if (financialQuery.error || bookingsQuery.error || !financialQuery.data || !bookingsQuery.data) {
-    return <ErrorStateCard message="Financial intelligence data is currently unavailable." />;
+    return <ErrorStateCard message="Financial performance data is currently unavailable." />;
   }
 
   const rawData = financialQuery.data;
@@ -518,7 +518,7 @@ export function FinancialOverviewWorkspace() {
   };
 
   const handleExportPDF = () => {
-    toast.info("CFO Financial Intelligence Report PDF generation started. The document will download automatically in a few seconds.");
+    toast.info("CFO Financial Performance Report PDF generation started. The document will download automatically in a few seconds.");
   };
 
   const handleGenerateReport = () => {
@@ -532,7 +532,7 @@ export function FinancialOverviewWorkspace() {
       <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-page-title font-secondary font-bold text-text-primary tracking-tight">
-            Financial Intelligence
+            Financial Performance
           </h1>
           <p className="mt-1.5 text-body text-text-secondary max-w-3xl">
             Monitor collections, receivables, revenue performance, payment schedules, outstanding dues, and project-level financial health across the organization.
@@ -583,7 +583,7 @@ export function FinancialOverviewWorkspace() {
         </div>
       </div>
 
-      {/* SECTION 1: FINANCIAL COMMAND CENTER (HERO CARD) */}
+      {/* SECTION 1: FINANCIAL OPERATIONS DASHBOARD (HERO CARD) */}
       <Card className="relative overflow-hidden border border-border-soft bg-linear-to-br from-white via-white to-blue-50/20 shadow-enterprise p-6">
         <div className="absolute top-0 right-0 w-80 h-80 bg-linear-to-bl from-accent-primary/5 to-transparent rounded-full pointer-events-none" />
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-center">
@@ -815,7 +815,7 @@ export function FinancialOverviewWorkspace() {
       <div className="space-y-4">
         <h2 className="text-section-title font-bold text-text-primary flex items-center gap-2">
           <Activity className="h-5 w-5 text-accent-primary" />
-          Collections Intelligence & Recommendations
+          Collections Performance & Recommendations
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {aiInsights.map((insight) => (

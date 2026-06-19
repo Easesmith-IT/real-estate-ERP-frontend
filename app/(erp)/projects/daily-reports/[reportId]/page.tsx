@@ -224,7 +224,7 @@ export default function ReportDetailPage() {
     }
   };
 
-  if (reportLoading || projectsLoading) return <LoadingStateCard title="Loading Site Intelligence Details" />;
+  if (reportLoading || projectsLoading) return <LoadingStateCard title="Loading Site Operations Details" />;
   if (reportError || !reportData) return <ErrorStateCard message="Operation report details are unavailable." />;
 
   const health = reportData.siteHealth || 90;

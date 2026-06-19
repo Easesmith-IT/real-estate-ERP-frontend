@@ -25,7 +25,7 @@ export function SettingsOverviewWorkspace() {
   });
 
   if (usersQuery.isLoading || settingsQuery.isLoading) {
-    return <LoadingStateCard title="Loading settings control center" />;
+    return <LoadingStateCard title="Loading settings console" />;
   }
 
   if (usersQuery.error || settingsQuery.error || !usersQuery.data || !settingsQuery.data) {
@@ -42,21 +42,21 @@ export function SettingsOverviewWorkspace() {
     },
     {
       title: "Notification Settings",
-      detail: "Escalation channels, reminder cadence, and demo WhatsApp-style messaging controls.",
+      detail: "Escalation channels, reminder cadence, and WhatsApp message template configurations.",
       href: "/settings/notification-settings",
       icon: BellRing,
       metric: `${settingsQuery.data.notificationSettings.length} live rules`,
     },
     {
       title: "Workflow Settings",
-      detail: "Approval flow, biometric sync cadence, and operational thresholds that drive the demo system.",
+      detail: "Approval flow, biometric sync cadence, and operational thresholds that drive workflow actions.",
       href: "/settings/workflow-settings",
       icon: Settings2,
       metric: `${settingsQuery.data.workflowSettings.length} policies`,
     },
     {
       title: "Users and Permissions",
-      detail: "Access templates, module visibility, and operator-role governance for demo roles.",
+      detail: "Access templates, module visibility, and operator-role governance profiles.",
       href: "/settings/users-permissions",
       icon: ShieldCheck,
       metric: `${usersQuery.data.users.length} ERP users`,
@@ -66,8 +66,8 @@ export function SettingsOverviewWorkspace() {
   return (
     <section className="space-y-6">
       <SectionHeader
-        title="Settings Control Center"
-        description="Operational controls, notification rules, permissions, and ERP defaults gathered into one admin-facing command surface."
+        title="Settings Console"
+        description="Operational controls, notification rules, permissions, and ERP defaults gathered into one admin-facing console surface."
       />
 
       <KpiGrid
@@ -189,7 +189,7 @@ export function PermissionsWorkspace() {
 
       <KpiGrid
         items={[
-          { label: "ERP Users", value: `${usersQuery.data.users.length}`, trend: "Seeded demo operators", tone: "info" },
+          { label: "ERP Users", value: `${usersQuery.data.users.length}`, trend: "Seeded operators and system owners", tone: "info" },
           { label: "Role Profiles", value: `${roleCount}`, trend: "Permission group templates", tone: "success" },
           { label: "Workflow Policies", value: `${settingsQuery.data.workflowSettings.length}`, trend: "Operational controls", tone: "warning" },
           { label: "Notification Rules", value: `${settingsQuery.data.notificationSettings.length}`, trend: "System alerts configured", tone: "info" },

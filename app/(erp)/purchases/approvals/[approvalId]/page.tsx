@@ -165,7 +165,7 @@ export default function Page({ params }: { params: Promise<{ approvalId: string 
         <ShieldAlert className="h-12 w-12 text-accent-critical" />
         <h3 className="text-section-title font-medium text-text-primary">Approval Not Found</h3>
         <p className="max-w-md text-body text-text-muted">The approval request ID you are trying to view does not exist or has been deleted.</p>
-        <Button onClick={() => router.push("/purchases/approvals")}>Back to Command Center</Button>
+        <Button onClick={() => router.push("/purchases/approvals")}>Back to Approvals Console</Button>
       </div>
     );
   }
@@ -183,7 +183,7 @@ export default function Page({ params }: { params: Promise<{ approvalId: string 
           className="inline-flex items-center gap-1.5 text-body font-semibold text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Command Center
+          Back to Approvals Console
         </button>
       </div>
 
@@ -617,7 +617,7 @@ export default function Page({ params }: { params: Promise<{ approvalId: string 
             <CardHeader className="pb-3 border-b border-border-soft/60">
               <CardTitle className="text-body font-semibold text-text-primary flex items-center gap-1.5">
                 <Siren className="h-4.5 w-4.5 text-blue-500" />
-                Command Center Advisory
+                Approvals Console Advisory
               </CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-4 text-xs text-text-secondary leading-relaxed">

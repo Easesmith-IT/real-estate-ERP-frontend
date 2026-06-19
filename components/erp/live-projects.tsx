@@ -191,7 +191,7 @@ export function ProjectsInventoryWorkspace() {
             <div className="flex justify-end">
               <Button loading={createMutation.isPending} onClick={() => createMutation.mutate()}>
                 <FolderPlus className="h-4 w-4" />
-                Add Project
+                Create Project
               </Button>
             </div>
           </CardContent>
@@ -203,7 +203,7 @@ export function ProjectsInventoryWorkspace() {
           <div className="space-y-1">
             <CardTitle>Unit Availability Register</CardTitle>
             <p className="text-body text-text-secondary">
-              Commercial inventory with searchable unit mix, stage-aware filtering, and ready-to-pitch premium stock visibility.
+              Commercial inventory with searchable unit mix, stage-aware filtering, and real-time availability status.
             </p>
           </div>
         </CardHeader>
@@ -232,7 +232,7 @@ export function ProjectsInventoryWorkspace() {
             }
             resultLabel={`${units.length} of ${projectsQuery.data.units.length} units`}
             activeFilters={activeFilters}
-            summary={`${projectsVisible} projects represented · ${premiumUnits} premium-value units in current view`}
+            summary={`${projectsVisible} projects represented · ${premiumUnits} high-value units in current view`}
             onClear={() => {
               setSearch("");
               setStageFilter("All");

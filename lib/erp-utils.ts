@@ -3,14 +3,20 @@ export function formatCurrency(value: number) {
 }
 
 export function formatDateTime(value: string) {
-  return new Date(value).toLocaleString("en-IN", {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return "N/A";
+  return date.toLocaleString("en-IN", {
     dateStyle: "medium",
     timeStyle: "short",
   });
 }
 
 export function formatDate(value: string) {
-  return new Date(value).toLocaleDateString("en-IN", {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return "N/A";
+  return date.toLocaleDateString("en-IN", {
     dateStyle: "medium",
   });
 }

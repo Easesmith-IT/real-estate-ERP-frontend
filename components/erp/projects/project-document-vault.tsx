@@ -784,7 +784,6 @@ export function ProjectDocumentVault() {
                   <Badge tone="info">Executive summary</Badge>
                   <Badge tone={documentationReady > 0 ? "success" : "warning"}>{documentationReady} documentation-ready projects</Badge>
                 </div>
-                <h2 className="text-section-title font-semibold text-text-primary">Documentation intelligence is now the primary lens, not the register.</h2>
                 <p className="max-w-4xl text-body leading-7 text-text-secondary">
                   The vault currently tracks {totalDocuments} documents across {coveredProjects} active projects. {pendingReviews} records remain in review, {expiringThisMonth} approvals require near-term action, and the portfolio is averaging {averageCoverage}% documentation completeness against the required project evidence set.
                 </p>
@@ -884,17 +883,47 @@ export function ProjectDocumentVault() {
         </Card>
 
         <Card className="border border-border-soft shadow-soft">
-          <CardHeader>
-            <CardTitle>Project Documentation Coverage</CardTitle>
+          <CardHeader className="border-b border-border-soft pb-4">
+            <CardTitle className="text-section-title font-semibold text-text-primary">Project Documentation Coverage</CardTitle>
           </CardHeader>
-          <CardContent className="h-[360px]">
+          <CardContent className="h-[420px] pt-6">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={coverageChartData} layout="vertical" margin={{ top: 8, right: 24, left: 8, bottom: 8 }}>
-                <CartesianGrid horizontal={false} strokeDasharray="3 3" />
-                <XAxis type="number" domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
-                <YAxis type="category" dataKey="project" width={120} />
-                <Tooltip formatter={(value) => `${value}%`} />
-                <Bar dataKey="coverage" fill="#2563eb" radius={[0, 8, 8, 0]} />
+                <CartesianGrid horizontal={false} stroke="var(--color-border-soft)" strokeDasharray="3 3" />
+                <XAxis 
+                  type="number" 
+                  domain={[0, 100]} 
+                  tickFormatter={(value) => `${value}%`} 
+                  tick={{ fontSize: 11, fill: 'var(--color-text-muted)' }} 
+                  axisLine={false} 
+                  tickLine={false} 
+                />
+                <YAxis 
+                  type="category" 
+                  dataKey="project" 
+                  width={150} 
+                  tick={{ fontSize: 11, fill: 'var(--color-text-muted)' }} 
+                  axisLine={false} 
+                  tickLine={false} 
+                />
+                <Tooltip 
+                  formatter={(value) => [`${value}%`, "Coverage"]} 
+                  cursor={{ fill: 'var(--color-hover)', opacity: 0.3 }}
+                  contentStyle={{
+                    backgroundColor: 'var(--color-surface)',
+                    border: '1px solid var(--color-border-soft)',
+                    borderRadius: 'var(--radius-button)',
+                    boxShadow: 'var(--shadow-soft)',
+                    fontSize: '12px'
+                  }}
+                />
+                <Bar 
+                  dataKey="coverage" 
+                  fill="var(--color-accent-primary)" 
+                  radius={4} 
+                  background={{ fill: 'var(--color-surface-secondary)', radius: 4 }}
+                  barSize={14}
+                />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -942,7 +971,7 @@ export function ProjectDocumentVault() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="Approved" stackId="a" fill="#16a34a" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="Approved" stackId="a" fill="#16a34a" radius={8} />
                 <Bar dataKey="Pending" stackId="a" fill="#2563eb" />
                 <Bar dataKey="Expiring" stackId="a" fill="#f59e0b" />
                 <Bar dataKey="Expired" stackId="a" fill="#dc2626" />

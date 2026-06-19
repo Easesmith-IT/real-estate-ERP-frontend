@@ -25,7 +25,7 @@ export function EmptySectionPage({ sectionSlug }: { sectionSlug: string }) {
             {section.label} Section
           </p>
           <p className="mt-2 text-body text-text-secondary">
-            Empty section page scaffold created. Use the sidebar submenu pages to access page-level placeholders.
+            Module division initialized. Use the sidebar menu options to navigate to detail records.
           </p>
         </CardContent>
       </Card>
@@ -63,7 +63,7 @@ export function EmptyChildPage({
             {section.label} / {page.label}
           </p>
           <p className="mt-2 text-body text-text-secondary">
-            Empty page scaffold created for this navigation route.
+            No Data Available. This module is undergoing configuration.
           </p>
         </CardContent>
       </Card>

@@ -27,10 +27,10 @@ export function NotificationCenter() {
         <div className="rounded-[var(--radius-card)] border border-border-soft bg-surface-secondary p-4">
           <div className="flex items-center gap-2">
             <BellRing className="h-4 w-4 text-accent-primary" />
-            <p className="font-medium text-text-primary">Live demo notification feed</p>
+            <p className="font-medium text-text-primary">Operations Notification Center Feed</p>
           </div>
           <p className="mt-2 text-body text-text-secondary">
-            Notification behavior is simulated for the demo, but each item is derived from current ERP activity and risk signals.
+            Operational updates and notifications generated in real-time from active ERP registers and risk signals.
           </p>
         </div>
 
@@ -47,7 +47,12 @@ export function NotificationCenter() {
           </div>
         ) : null}
 
-        {query.isLoading ? <p className="text-body text-text-secondary">Loading notifications...</p> : null}
+        {query.isLoading ? (
+          <div className="space-y-3">
+            <div className="h-20 w-full rounded-[var(--radius-card)] shimmer-skeleton" />
+            <div className="h-20 w-full rounded-[var(--radius-card)] shimmer-skeleton" />
+          </div>
+        ) : null}
         {query.error ? <p className="text-body text-error">Notification feed is unavailable.</p> : null}
 
         {query.data ? (

@@ -207,7 +207,7 @@ export default function MaterialsIntelligenceCenter() {
     projectsQuery.isLoading ||
     purchaseOrdersQuery.isLoading
   ) {
-    return <LoadingStateCard title="Loading Material Intelligence Center" />;
+    return <LoadingStateCard title="Loading Material Performance Center" />;
   }
 
   if (
@@ -220,7 +220,7 @@ export default function MaterialsIntelligenceCenter() {
     !consumptionQuery.data ||
     !transfersQuery.data
   ) {
-    return <ErrorStateCard message="Failed to load inventory intelligence data." />;
+    return <ErrorStateCard message="Failed to load inventory performance data." />;
   }
 
   const rawMaterials = materialsQuery.data.materials;
@@ -283,6 +283,48 @@ export default function MaterialsIntelligenceCenter() {
 
   const filteredConsumptions = consumptions.filter(c => 
     filteredMaterials.some(m => m.id === c.materialId)
+  );
+
+  const warehousePerformanceMaterials = rawMaterials.filter((m) => {
+    const needle = search.trim().toLowerCase();
+    const matchesSearch =
+      !needle ||
+      m.name.toLowerCase().includes(needle) ||
+      m.sku.toLowerCase().includes(needle) ||
+      m.projectName.toLowerCase().includes(needle) ||
+      m.warehouseName.toLowerCase().includes(needle);
+
+    const matchesProject = projectFilter === "All" || m.projectId === projectFilter;
+    const matchesCategory = categoryFilter === "All" || m.category === categoryFilter;
+
+    // Risk levels
+    const isCritical = m.onHand <= m.reorderLevel * 0.25 || m.onHand === 0;
+    const isLow = m.status === "Low Stock" && !isCritical;
+    const isHealthy = !isCritical && !isLow;
+
+    let matRisk = "Healthy";
+    if (isCritical) matRisk = "Critical";
+    else if (isLow) matRisk = "Warning";
+
+    const matchesRisk = riskFilter === "All" || matRisk === riskFilter;
+
+    // Quick pills
+    const avgCons = m.averageConsumption || 10;
+    const coverageDays = avgCons > 0 ? Math.round(m.onHand / avgCons) : 99;
+
+    let matchesQuick = true;
+    if (quickFilter === "Critical") matchesQuick = isCritical;
+    else if (quickFilter === "Warning") matchesQuick = isLow;
+    else if (quickFilter === "Healthy") matchesQuick = isHealthy;
+    else if (quickFilter === "Fast Moving") matchesQuick = m.averageConsumption >= 12 && m.onHand > 0 && coverageDays <= 5;
+    else if (quickFilter === "High Consumption") matchesQuick = m.averageConsumption >= 15;
+    else if (quickFilter === "Low Coverage") matchesQuick = coverageDays <= 12;
+
+    return matchesSearch && matchesProject && matchesCategory && matchesRisk && matchesQuick;
+  });
+
+  const warehousePerformanceConsumptions = consumptions.filter(c => 
+    warehousePerformanceMaterials.some(m => m.id === c.materialId)
   );
   const monthlyConsumptionVolume = filteredConsumptions.reduce((sum, c) => sum + c.quantity, 0) || 4840;
   const monthlyConsumptionValue = filteredConsumptions.reduce((sum, c) => {
@@ -360,7 +402,7 @@ export default function MaterialsIntelligenceCenter() {
       {/* PAGE HEADER */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-page-title font-secondary text-text-primary">Material Intelligence</h1>
+          <h1 className="text-page-title font-secondary text-text-primary">Material Performance Center</h1>
           <p className="max-w-3xl text-body text-text-secondary">
             Monitor inventory health, stock risks, material consumption, project demand, warehouse performance, and procurement readiness from a unified analytics workspace.
           </p>
@@ -561,8 +603,8 @@ export default function MaterialsIntelligenceCenter() {
       {/* SECTION 7: WAREHOUSE PERFORMANCE CENTER */}
       <WarehousePerformance
         warehouses={warehouses}
-        materials={filteredMaterials}
-        consumptions={filteredConsumptions}
+        materials={warehousePerformanceMaterials}
+        consumptions={warehousePerformanceConsumptions}
         selectedWarehouseId={warehouseFilter === "All" ? null : warehouseFilter}
         onSelectWarehouse={(whId) => setWarehouseFilter(whId || "All")}
       />

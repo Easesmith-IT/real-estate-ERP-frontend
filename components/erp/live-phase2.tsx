@@ -291,7 +291,7 @@ export function ExecutiveDashboardWorkspace() {
   }, [dashboardQuery.data, portfolio]);
 
   if (dashboardQuery.isLoading) {
-    return <LoadingStateCard title="Initializing Executive Intelligence Center" />;
+    return <LoadingStateCard title="Initializing Executive Operations Dashboard" />;
   }
 
   if (dashboardQuery.error || !dashboardQuery.data || !pageData) {
@@ -300,7 +300,7 @@ export function ExecutiveDashboardWorkspace() {
         message={
           dashboardQuery.error instanceof Error
             ? dashboardQuery.error.message
-            : "Executive Intelligence Center is currently unavailable."
+            : "Executive Operations Dashboard is currently unavailable."
         }
       />
     );
@@ -422,7 +422,7 @@ export function ExecutiveDashboardWorkspace() {
             <span className="h-2 w-2 rounded-full bg-accent-primary animate-pulse" />
             Executive Dashboard
           </div>
-          <h1 className="text-page-title text-text-primary mt-1 font-bold">Executive Intelligence Center</h1>
+          <h1 className="text-page-title text-text-primary mt-1 font-bold">Executive Operations Dashboard</h1>
           <p className="text-body text-text-secondary mt-1.5 max-w-4xl">
             Real-time visibility into portfolio performance, project health, revenue, collections, operational risks, workforce capacity, and executive priorities.
           </p>
@@ -482,7 +482,7 @@ export function ExecutiveDashboardWorkspace() {
         </div>
       </div>
 
-      {/* SECTION 1: PORTFOLIO HEALTH COMMAND CENTER */}
+      {/* SECTION 1: PORTFOLIO HEALTH SUMMARY */}
       <Card className="overflow-hidden border border-accent-primary/15 bg-linear-to-br from-white via-white to-accent-primary/8 shadow-enterprise">
         <CardContent className="grid grid-cols-1 gap-8 p-6 lg:grid-cols-[1fr_320px] lg:items-center">
           <div className="space-y-6">
@@ -498,7 +498,7 @@ export function ExecutiveDashboardWorkspace() {
 
             <div className="space-y-3">
               <h2 className="text-[32px] font-bold leading-tight tracking-tight text-text-primary">
-                Executive Command Center
+                Executive Operations Snapshot
               </h2>
               <p className="text-body text-text-secondary leading-relaxed max-w-3xl">
                 {overview.portfolio.narrative} Portfolio performance remains strong. Collections improved by 12% across core zones, offset by minor administrative and milestone risk signals on towers currently in structure phase. Three projects require immediate risk-mitigation review.
@@ -1596,15 +1596,7 @@ export function ExecutiveDashboardWorkspace() {
             <span className="text-label font-bold text-text-primary">Material Alerts</span>
           </Link>
 
-          <Link
-            href="/management/project-health"
-            className="rounded-xl border border-border-soft bg-surface p-4 text-center hover:bg-hover hover:border-accent-primary/20 hover:-translate-y-0.5 transition-all shadow-soft flex flex-col items-center justify-center space-y-3"
-          >
-            <div className="p-3 bg-amber-500/10 text-warning rounded-xl">
-              <ShieldAlert className="h-5 w-5" />
-            </div>
-            <span className="text-label font-bold text-text-primary">Project Risks</span>
-          </Link>
+
 
           <Link
             href="/purchases/approvals"
@@ -2141,7 +2133,7 @@ export function WorkflowSettingsWorkspace() {
                     <Smartphone className="h-4 w-4 text-accent-primary" />
                     <p className="font-medium text-text-primary">Biometric Device Bridge</p>
                   </div>
-                  <p className="text-body text-text-secondary">Demo sync for gate scanners and site kiosks without any live hardware dependency.</p>
+                  <p className="text-body text-text-secondary">Synchronization module for gate scanners and site kiosks to retrieve local device logs.</p>
                 </div>
                 <Badge tone={toneForStatus(biometricStatus)}>{biometricStatus}</Badge>
               </div>
@@ -2170,7 +2162,7 @@ export function WorkflowSettingsWorkspace() {
               <div className="mt-4 flex justify-end">
                 <Button loading={biometricSyncMutation.isPending} onClick={() => biometricSyncMutation.mutate()}>
                   <RefreshCcw className="h-4 w-4" />
-                  Run Demo Sync
+                  Execute Synchronization
                 </Button>
               </div>
             </div>
@@ -2300,9 +2292,9 @@ export function NotificationSettingsWorkspace() {
                 <div>
                   <div className="flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-accent-primary" />
-                    <p className="font-medium text-text-primary">WhatsApp Demo Integration</p>
+                    <p className="font-medium text-text-primary">WhatsApp Channel Integration</p>
                   </div>
-                  <p className="mt-2 text-body text-text-secondary">Functional demo channel for approvals, reminders, and customer notifications without any live WhatsApp dependency.</p>
+                  <p className="mt-2 text-body text-text-secondary">Operations channel for approvals, reminders, and customer notifications via messaging gateway.</p>
                 </div>
                 <Badge tone={toneForStatus(whatsappStatus)}>{whatsappStatus}</Badge>
               </div>
@@ -2327,7 +2319,7 @@ export function NotificationSettingsWorkspace() {
                 </Button>
                 <Button loading={whatsappSendMutation.isPending} onClick={() => whatsappSendMutation.mutate()}>
                   <Send className="h-4 w-4" />
-                  Send Demo Alert
+                  Send Notification Alert
                 </Button>
               </div>
             </div>

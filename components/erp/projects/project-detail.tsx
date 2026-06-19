@@ -245,54 +245,62 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
       {/* Project Hero Section */}
       <Card className="border border-border-soft bg-gradient-to-r from-surface to-surface-secondary/20 shadow-premium">
         <CardContent className="p-6">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2.5">
-                <Building2 className="h-7 w-7 text-accent-primary" />
+          <div className="flex flex-col gap-5">
+            {/* Top Row: Project Title & Stage Badge on left, KPIs on right */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+                <Building2 className="h-7 w-7 text-accent-primary shrink-0" />
                 <h1 className="text-3xl font-bold font-secondary text-text-primary">{project.name}</h1>
-                <Badge tone={getStageTone(project.stage)} className="text-body font-semibold">
+                <Badge tone={getStageTone(project.stage)} className="font-semibold whitespace-nowrap shrink-0">
                   {project.stage}
                 </Badge>
               </div>
+
+              {/* Quick KPIs in Hero */}
+              <div className="flex items-center gap-4 flex-wrap sm:flex-nowrap shrink-0">
+                <div className="text-center bg-surface border border-border-soft px-4 py-2.5 rounded-[var(--radius-input)] shadow-soft shrink-0">
+                  <span className="text-label text-text-muted">Health Score</span>
+                  <p className="mt-0.5">
+                    <Badge tone={healthTone} className="font-bold whitespace-nowrap">
+                      {health} - {healthLabel}
+                    </Badge>
+                  </p>
+                </div>
+                <div className="text-center bg-surface border border-border-soft px-4 py-2.5 rounded-[var(--radius-input)] shadow-soft shrink-0">
+                  <span className="text-label text-text-muted">Portfolio Value</span>
+                  <p className="text-lg font-bold text-text-primary mt-0.5 whitespace-nowrap">{formatCr(totalUnitsValue)}</p>
+                </div>
+                <div className="text-center bg-surface border border-border-soft px-4 py-2.5 rounded-[var(--radius-input)] shadow-soft shrink-0">
+                  <span className="text-label text-text-muted">Revenue Potential</span>
+                  <p className="text-lg font-bold text-accent-primary mt-0.5 whitespace-nowrap">{formatCr(revenuePotential)}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Visual Divider */}
+            <div className="h-px bg-border-soft/60" />
+
+            {/* Bottom Row: Metadata on left, Quick Actions on right */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <p className="text-body text-text-secondary">
                 Project Code: <strong className="text-text-primary">{project.code}</strong> · Location: <strong className="text-text-primary">{project.location}</strong> · Manager: <strong className="text-text-primary">{project.managerName}</strong>
               </p>
-            </div>
 
-            {/* Quick KPIs in Hero */}
-            <div className="flex items-center gap-6 flex-wrap">
-              <div className="text-center bg-surface border border-border-soft px-4 py-2.5 rounded-[var(--radius-input)] shadow-soft">
-                <span className="text-label text-text-muted">Health Score</span>
-                <p className="mt-0.5">
-                  <Badge tone={healthTone} className="font-bold text-white">
-                    {health} - {healthLabel}
-                  </Badge>
-                </p>
+              {/* Quick Actions */}
+              <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
+                <Button variant="outline" size="sm" onClick={handleExport} className="border-border-strong text-text-secondary gap-1.5 h-10 shrink-0">
+                  <Download className="h-4 w-4" />
+                  <span>Export Ledger</span>
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleReport} className="border-border-strong text-text-secondary gap-1.5 h-10 shrink-0">
+                  <FileText className="h-4 w-4" />
+                  <span>Generate Report</span>
+                </Button>
+                <Button variant="primary" size="sm" onClick={handleEdit} className="text-white gap-1.5 h-10 font-semibold shrink-0">
+                  <Edit2 className="h-4 w-4" />
+                  <span>Edit Project</span>
+                </Button>
               </div>
-              <div className="text-center bg-surface border border-border-soft px-4 py-2.5 rounded-[var(--radius-input)] shadow-soft">
-                <span className="text-label text-text-muted">Portfolio Value</span>
-                <p className="text-lg font-bold text-text-primary mt-0.5">{formatCr(totalUnitsValue)}</p>
-              </div>
-              <div className="text-center bg-surface border border-border-soft px-4 py-2.5 rounded-[var(--radius-input)] shadow-soft">
-                <span className="text-label text-text-muted">Revenue Potential</span>
-                <p className="text-lg font-bold text-accent-primary mt-0.5">{formatCr(revenuePotential)}</p>
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <Button variant="outline" size="sm" onClick={handleExport} className="border-border-strong text-text-secondary gap-1.5 h-10">
-                <Download className="h-4 w-4" />
-                <span>Export Ledger</span>
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleReport} className="border-border-strong text-text-secondary gap-1.5 h-10">
-                <FileText className="h-4 w-4" />
-                <span>Generate Report</span>
-              </Button>
-              <Button variant="primary" size="sm" onClick={handleEdit} className="text-white gap-1.5 h-10 font-semibold">
-                <Edit2 className="h-4 w-4" />
-                <span>Edit Project</span>
-              </Button>
             </div>
           </div>
         </CardContent>
@@ -324,9 +332,9 @@ export function ProjectDetail({ projectId }: ProjectDetailProps) {
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
               {tab.id === "risk" && projectRisks.length > 0 && (
-                <Badge tone="error" className="ml-1 h-5 min-w-5 flex items-center justify-center p-0 rounded-full text-white text-[10px] font-bold">
+                <span className="ml-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-error px-1.5 text-[10px] font-bold text-white shadow-soft">
                   {projectRisks.length}
-                </Badge>
+                </span>
               )}
             </button>
           );

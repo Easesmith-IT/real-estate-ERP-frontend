@@ -243,7 +243,7 @@ export default function SiteUpdateDetailPage() {
     return { projectReports: filtered, prevReportId, nextReportId };
   }, [reportData, allReportsData, updateId]);
 
-  if (reportLoading || projectsLoading || allReportsLoading) return <LoadingStateCard title="Loading update intelligence details" />;
+  if (reportLoading || projectsLoading || allReportsLoading) return <LoadingStateCard title="Loading site update details" />;
   if (reportError || !reportData) return <ErrorStateCard message="Site update details are unavailable." />;
 
   const validateForm = () => {
@@ -738,7 +738,7 @@ export default function SiteUpdateDetailPage() {
       {/* EDIT DRAWER (XL) */}
       <Drawer
         open={drawerOpen}
-        title="Update Site Intelligence Logs"
+        title="Update Site Operations Logs"
         size="xl"
         onClose={() => setDrawerOpen(false)}
       >

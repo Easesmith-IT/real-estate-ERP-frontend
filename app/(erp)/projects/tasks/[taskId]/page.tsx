@@ -346,7 +346,7 @@ export default function TaskDetailPage({ params }: { params: Promise<{ taskId: s
       {/* NAVIGATION CRUMB */}
       <Link href="/projects/tasks" className="inline-flex items-center gap-2 text-body text-text-muted hover:text-accent-primary transition-colors">
         <ArrowLeft className="h-4 w-4" />
-        Back to Tasks Command Center
+        Back to Tasks Dashboard
       </Link>
 
       {/* TASK DETAIL HEADER */}

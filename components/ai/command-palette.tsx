@@ -83,7 +83,7 @@ export function AICommandPalette() {
   );
 
   return (
-    <Modal open={open} onClose={() => toggleCommandPalette(false)} title="AI Command Palette" description="Fast operational actions across construction ERP workflows">
+    <Modal open={open} onClose={() => toggleCommandPalette(false)} title="Command Center" description="Fast operational actions across construction ERP workflows">
       <div className="space-y-4" onKeyDown={onKeyDown}>
         <Input
           placeholder="Type a command or ask for a report"
@@ -95,11 +95,17 @@ export function AICommandPalette() {
         />
 
         <div className="flex flex-wrap items-center gap-2">
-          <Badge tone="info">Demo simulation</Badge>
-          <p className="text-label text-text-muted">Reads live ERP demo data but does not call a real AI model.</p>
+          <Badge tone="info">Operational Mode</Badge>
+          <p className="text-label text-text-muted">Accesses the operational data register. Deterministic execution.</p>
         </div>
 
-        {overviewQuery.isLoading ? <p className="text-body text-text-secondary">Loading suggested commands...</p> : null}
+        {overviewQuery.isLoading ? (
+          <div className="space-y-2">
+            <div className="h-12 w-full rounded-[var(--radius-input)] shimmer-skeleton" />
+            <div className="h-12 w-full rounded-[var(--radius-input)] shimmer-skeleton" />
+            <div className="h-12 w-full rounded-[var(--radius-input)] shimmer-skeleton" />
+          </div>
+        ) : null}
         {overviewQuery.error ? <p className="text-body text-error">Assistant commands are unavailable.</p> : null}
 
         <div className="space-y-2" role="listbox" aria-label="Suggested actions">
@@ -128,7 +134,7 @@ export function AICommandPalette() {
 
           {!overviewQuery.isLoading && filteredCommands.length === 0 ? (
             <div className="rounded-[var(--radius-input)] border border-dashed border-border-soft bg-surface-secondary px-4 py-5 text-body text-text-secondary">
-              No preset matched the current query. Press Enter to run a generic demo brief from the typed prompt.
+              No preset matched the current query. Press Enter to execute a query based on the typed prompt.
             </div>
           ) : null}
         </div>
@@ -139,7 +145,7 @@ export function AICommandPalette() {
           </div>
           <Button loading={runCommandMutation.isPending} onClick={() => handleAction(filteredCommands[activeIndex]?.id)}>
             <Command className="h-4 w-4" />
-            Run demo command
+            Execute Command
           </Button>
         </div>
 

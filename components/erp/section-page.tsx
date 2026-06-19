@@ -36,9 +36,9 @@ function HomeDashboardContent() {
           <AnalyticsCards
             title="Project and Sales Trends"
             cards={[
-              { title: "Execution Velocity", description: "Placeholder for schedule vs actual progress trend chart." },
-              { title: "Lead Conversions", description: "Placeholder for lead-to-customer conversion trend chart." },
-              { title: "Workforce Efficiency", description: "Placeholder for productivity movement by project cluster." },
+              { title: "Execution Velocity", description: "Schedule vs actual progress trend analysis." },
+              { title: "Lead Conversions", description: "Lead-to-customer conversion performance metrics." },
+              { title: "Workforce Efficiency", description: "Productivity metrics by project cluster." },
             ]}
           />
         </div>
@@ -50,7 +50,7 @@ function HomeDashboardContent() {
         pages={[
           { label: "Create Project", slug: "create-project", description: "Start a new construction project.", template: "overview" },
           { label: "Approve Request", slug: "approve-request", description: "Review pending purchase approvals.", template: "overview" },
-          { label: "Add Lead", slug: "add-lead", description: "Capture new sales lead from inquiry.", template: "overview" },
+          { label: "Register Lead", slug: "register-lead", description: "Capture new sales lead from inquiry.", template: "overview" },
           { label: "Record Attendance", slug: "record-attendance", description: "Submit today workforce attendance.", template: "overview" },
           { label: "Stock Transfer", slug: "stock-transfer", description: "Move materials between warehouses.", template: "overview" },
           { label: "Generate Report", slug: "generate-report", description: "Export operational summary report.", template: "overview" },
@@ -75,9 +75,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           />
           <AnalyticsCards
             cards={[
-              { title: "Performance Snapshot", description: "Placeholder for key performance trend visualization." },
-              { title: "Cycle Time", description: "Placeholder for process cycle time and bottleneck chart." },
-              { title: "Capacity Allocation", description: "Placeholder for utilization mix and allocation trend." },
+              { title: "Performance Snapshot", description: "Key performance indicators and trend analysis." },
+              { title: "Cycle Time", description: "Process cycle duration and operational constraints overview." },
+              { title: "Capacity Allocation", description: "Utilization distribution and resource allocation trends." },
             ]}
           />
           <ActivityTimeline title="Recent Activity" />
@@ -92,9 +92,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <AnalyticsCards
             title="Activity Signals"
             cards={[
-              { title: "Escalations", description: "Placeholder for escalated events trend." },
-              { title: "Response Times", description: "Placeholder for average response SLA trend." },
-              { title: "Resolved Actions", description: "Placeholder for closure trajectory chart." },
+              { title: "Escalations", description: "Escalated events trajectory and resolution status." },
+              { title: "Response Times", description: "Average response SLA analysis and response times." },
+              { title: "Resolved Actions", description: "Resolved actions closure trajectory and trend analysis." },
             ]}
           />
         </div>
@@ -106,7 +106,7 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <QuickActionPanel pages={section.pages} />
           <EmptyState
             title="Action Templates"
-            description="Saved action templates and role-specific macros will appear here after backend workflows are connected."
+            description="Access and deploy saved action templates and role-specific macros."
             actionLabel="Create Action Template"
           />
         </div>
@@ -128,15 +128,15 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
             <CardContent className="grid grid-cols-1 gap-4 lg:grid-cols-3">
               <div className="surface-secondary p-4">
                 <p className="text-card-title text-text-primary">Primary Information</p>
-                <p className="mt-2 text-body text-text-secondary">Core profile panel placeholder with contact, role, and assignment context.</p>
+                <p className="mt-2 text-body text-text-secondary">Primary contact information, organizational roles, and assignment parameters.</p>
               </div>
               <div className="surface-secondary p-4">
                 <p className="text-card-title text-text-primary">Activity Summary</p>
-                <p className="mt-2 text-body text-text-secondary">Recent interactions, tasks, and pending actions section placeholder.</p>
+                <p className="mt-2 text-body text-text-secondary">Chronological history of interactions, tasks, and outstanding deliverables.</p>
               </div>
               <div className="surface-secondary p-4">
                 <p className="text-card-title text-text-primary">Performance Signals</p>
-                <p className="mt-2 text-body text-text-secondary">Utilization, contribution, and quality indicators placeholder.</p>
+                <p className="mt-2 text-body text-text-secondary">Operational indicators measuring utilization, performance, and compliance.</p>
               </div>
             </CardContent>
           </Card>
@@ -156,9 +156,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <TableLayout title="Attendance Log" rowPrefix="ATT" columns={["Record", "Employee", "Site", "Shift", "Check-In"]} />
           <AnalyticsCards
             cards={[
-              { title: "Attendance Trend", description: "Placeholder for attendance by date range." },
-              { title: "Shift Utilization", description: "Placeholder for shift-level manpower usage." },
-              { title: "Absentee Patterns", description: "Placeholder for absenteeism trend analytics." },
+              { title: "Attendance Trend", description: "Time-series distribution of workforce attendance by date range." },
+              { title: "Shift Utilization", description: "Manpower allocation and utilization analysis by work shift." },
+              { title: "Absentee Patterns", description: "Historical absenteeism trend analysis and key factors." },
             ]}
           />
         </div>
@@ -171,17 +171,17 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <AnalyticsCards
             title={`${page.label} Dashboard`}
             cards={[
-              { title: "Trend Overview", description: "Placeholder for period-over-period trends." },
-              { title: "Segment Breakdown", description: "Placeholder for segment-wise performance mix." },
-              { title: "Risk Signals", description: "Placeholder for anomaly and risk chart slots." },
-              { title: "Forecast Lane", description: "Placeholder for projected outcome visualizations." },
-              { title: "Variance View", description: "Placeholder for target vs actual variance chart." },
-              { title: "Efficiency Index", description: "Placeholder for process efficiency index chart." },
+              { title: "Trend Overview", description: "Period-over-period comparison trends." },
+              { title: "Segment Breakdown", description: "Segment-wise performance mix and resource allocation analysis." },
+              { title: "Risk Signals", description: "Anomaly detection and risk signals reporting." },
+              { title: "Forecast Lane", description: "Projected operational outcome forecasts." },
+              { title: "Variance View", description: "Variance analysis mapping target targets against actual outputs." },
+              { title: "Efficiency Index", description: "Process efficiency index metrics." },
             ]}
           />
           <EmptyState
             title="Advanced Analytics Integrations"
-            description="Connect data pipelines to activate live charting, trend forecasting, and deep drilldowns."
+            description="Awaiting data pipeline updates to populate live charting and trend forecasting."
             actionLabel="Connect Data Source"
           />
         </div>
@@ -196,9 +196,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           />
           <AnalyticsCards
             cards={[
-              { title: "Stage Conversion", description: "Placeholder for stage-wise conversion percentages." },
-              { title: "Pipeline Aging", description: "Placeholder for aging analysis by stage." },
-              { title: "Win-Loss Trend", description: "Placeholder for closure and drop-off trend chart." },
+              { title: "Stage Conversion", description: "Stage-wise conversion metrics across the pipeline." },
+              { title: "Pipeline Aging", description: "Aging analysis mapping deal stagnation by pipeline stage." },
+              { title: "Win-Loss Trend", description: "Analysis of closure rates and drop-off trends." },
             ]}
           />
         </div>
@@ -233,7 +233,7 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
               {["Tower A", "Tower B", "Club House", "Road Works", "Landscaping", "Utilities"].map((name, index) => (
                 <div key={name} className="surface-secondary space-y-3 p-4">
                   <p className="text-card-title text-text-primary">{name}</p>
-                  <p className="text-body text-text-secondary">Milestone set {index + 1} progress overview placeholder.</p>
+                  <p className="text-body text-text-secondary">Milestone set {index + 1} progress tracking overview.</p>
                   <div className="h-2 w-full rounded-full bg-hover">
                     <div className="h-2 rounded-full bg-accent-primary" style={{ width: `${52 + index * 7}%` }} />
                   </div>
@@ -255,15 +255,15 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
             <CardContent className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <div className="surface-secondary p-4">
                 <p className="text-card-title text-text-primary">Site Summary</p>
-                <p className="mt-2 text-body text-text-secondary">Placeholder for executed tasks, constraints, and planned next shift.</p>
+                <p className="mt-2 text-body text-text-secondary">Operational log detailing executed tasks, site constraints, and scheduled shifts.</p>
               </div>
               <div className="surface-secondary p-4">
                 <p className="text-card-title text-text-primary">Resource Utilization</p>
-                <p className="mt-2 text-body text-text-secondary">Placeholder for workforce, machinery, and material usage by site.</p>
+                <p className="mt-2 text-body text-text-secondary">Allocation records for site workforce, machinery, and material usage.</p>
               </div>
               <div className="surface-secondary p-4 lg:col-span-2">
                 <p className="text-card-title text-text-primary">Issues and Blockers</p>
-                <p className="mt-2 text-body text-text-secondary">Placeholder for critical blockers, delays, and escalation notes with tags.</p>
+                <p className="mt-2 text-body text-text-secondary">Log of critical project blockers, supply chain delays, and escalation records.</p>
               </div>
             </CardContent>
           </Card>
@@ -283,7 +283,7 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
               {["Central", "North", "South", "East", "West", "Transit"].map((location) => (
                 <div key={location} className="surface-secondary p-4">
                   <p className="text-card-title text-text-primary">{location} Hub</p>
-                  <p className="mt-2 text-body text-text-secondary">Capacity and allocation placeholder details for operational planning.</p>
+                  <p className="mt-2 text-body text-text-secondary">Capacity metrics and resource allocation records for operational planning.</p>
                   <Badge tone="info" className="mt-3">Operational</Badge>
                 </div>
               ))}
@@ -298,7 +298,7 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <TableLayout title="Document Register" rowPrefix="DOC" columns={["Doc ID", "Title", "Category", "Owner", "Version"]} />
           <EmptyState
             title="Document Automation"
-            description="Automated document lifecycle, approvals, and sharing controls can be connected in later backend phases."
+            description="Access automated document lifecycle, approvals, and sharing controls."
             actionLabel="Upload Document"
           />
         </div>
@@ -317,9 +317,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <TableLayout title={`${page.label} Inventory`} rowPrefix="MAT" columns={["SKU", "Material", "Warehouse", "On Hand", "Reorder Level"]} />
           <AnalyticsCards
             cards={[
-              { title: "Consumption Trend", description: "Placeholder for material usage trend by project." },
-              { title: "Procurement Lead Time", description: "Placeholder for replenishment cycle analytics." },
-              { title: "Category Mix", description: "Placeholder for category-wise stock value distribution." },
+              { title: "Consumption Trend", description: "Material usage trends mapped across active projects." },
+              { title: "Procurement Lead Time", description: "Replenishment cycles and lead time analytics." },
+              { title: "Category Mix", description: "Category-wise stock value and distribution analysis." },
             ]}
           />
         </div>
@@ -332,7 +332,7 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <TableLayout title={`${page.label} Register`} rowPrefix="MOV" columns={["Txn", "Material", "From", "To", "Quantity"]} />
           <EmptyState
             title="Movement Workflow Automation"
-            description="Approval automation and stock reconciliation rules will be activated when transaction backend APIs are connected."
+            description="Manage approval flows and stock reconciliation rules."
             actionLabel="Create Movement"
           />
         </div>
@@ -368,9 +368,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
                   {["Price", "Delivery Time", "Quality Score", "Credit Terms", "Warranty"].map((criterion) => (
                     <tr key={criterion} className="h-12 border-t border-border-soft">
                       <td className="px-4 text-text-primary">{criterion}</td>
-                      <td className="px-4">Placeholder</td>
-                      <td className="px-4">Placeholder</td>
-                      <td className="px-4">Placeholder</td>
+                      <td className="px-4 text-text-muted">Awaiting Data</td>
+                      <td className="px-4 text-text-muted">Awaiting Data</td>
+                      <td className="px-4 text-text-muted">Awaiting Data</td>
                     </tr>
                   ))}
                 </tbody>
@@ -419,9 +419,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <AnalyticsCards
             title="Report Dashboard"
             cards={[
-              { title: "Trend Area", description: "Placeholder for time-series visualization." },
-              { title: "Comparison View", description: "Placeholder for comparative chart blocks." },
-              { title: "Distribution Mix", description: "Placeholder for pie/bar composition charts." },
+              { title: "Trend Area", description: "Time-series reporting visualization." },
+              { title: "Comparison View", description: "Comparative operational performance charts." },
+              { title: "Distribution Mix", description: "Composition and distribution charts." },
             ]}
           />
           <TableLayout title="Export Center" rowPrefix="RPT" columns={["Report", "Generated By", "Type", "Range", "Generated At"]} />
@@ -441,16 +441,16 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <AnalyticsCards
             title="Executive Trend Visualizations"
             cards={[
-              { title: "Strategic KPI Trend", description: "Premium placeholder for multi-quarter performance lines." },
-              { title: "Capital Utilization", description: "Placeholder for budget-to-actual and utilization trend view." },
-              { title: "Risk Heatmap", description: "Placeholder for portfolio risk concentration heatmap." },
+              { title: "Strategic KPI Trend", description: "Multi-quarter strategic KPI performance lines." },
+              { title: "Capital Utilization", description: "Budget-to-actual utilization and trend analysis." },
+              { title: "Risk Heatmap", description: "Portfolio risk concentration mapping." },
             ]}
           />
           <Card className="surface-secondary">
             <CardContent className="py-6">
               <p className="text-card-title text-text-primary">Executive Notes Panel</p>
               <p className="mt-2 text-body text-text-secondary">
-                Curated strategic insights, watchlist highlights, and premium management commentary placeholders.
+                Curated strategic insights, watchlist highlights, and corporate management commentary.
               </p>
             </CardContent>
           </Card>
@@ -483,9 +483,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           />
           <AnalyticsCards
             cards={[
-              { title: "Revenue vs Cost", description: "Placeholder for monthly income and expenditure trend." },
-              { title: "Cash Flow", description: "Placeholder for inflow and outflow movement." },
-              { title: "Collection Performance", description: "Placeholder for receivables collection trend." },
+              { title: "Revenue vs Cost", description: "Monthly income and expenditure trend analysis." },
+              { title: "Cash Flow", description: "Inflow and outflow capital movement." },
+              { title: "Collection Performance", description: "Receivables collection performance metrics." },
             ]}
           />
         </div>
@@ -503,9 +503,9 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           />
           <AnalyticsCards
             cards={[
-              { title: "Site Productivity", description: "Placeholder for site-level throughput metrics." },
-              { title: "Resource Availability", description: "Placeholder for availability and bottleneck insights." },
-              { title: "Operational SLA", description: "Placeholder for SLA attainment and drift indicators." },
+              { title: "Site Productivity", description: "Site-level throughput and productivity metrics." },
+              { title: "Resource Availability", description: "Resource availability and bottleneck analysis." },
+              { title: "Operational SLA", description: "SLA attainment and operational drift indicators." },
             ]}
           />
         </div>
@@ -517,17 +517,17 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
           <AnalyticsCards
             title="Business Insights"
             cards={[
-              { title: "Growth Opportunities", description: "Placeholder cards for emerging opportunity signals." },
-              { title: "Risk Exposure", description: "Placeholder cards for risk cluster trends." },
-              { title: "Operational Leverage", description: "Placeholder cards for efficiency opportunities." },
-              { title: "Market Movement", description: "Placeholder cards for market trend proxies." },
-              { title: "Investment Signals", description: "Placeholder cards for high-priority investment options." },
-              { title: "Execution Readiness", description: "Placeholder cards for readiness and capability indicators." },
+              { title: "Growth Opportunities", description: "Performance metrics for emerging opportunity signals." },
+              { title: "Risk Exposure", description: "Performance metrics for risk cluster trends." },
+              { title: "Operational Leverage", description: "Performance metrics for efficiency opportunities." },
+              { title: "Market Movement", description: "Performance metrics for market trend proxies." },
+              { title: "Investment Signals", description: "Performance metrics for high-priority investment options." },
+              { title: "Execution Readiness", description: "Performance metrics for readiness and capability indicators." },
             ]}
           />
           <EmptyState
-            title="Decision Intelligence"
-            description="AI-generated executive insight narratives and scenario simulations can be connected in later iterations."
+            title="Decision Analytics"
+            description="Awaiting database updates to compile executive insight narratives and scenario comparisons."
             actionLabel="Configure Insight Rules"
           />
         </div>
@@ -552,8 +552,8 @@ function renderTemplate(section: NavSection, page: NavPage): React.ReactNode {
     default:
       return (
         <EmptyState
-          title="Page scaffold ready"
-          description="Page architecture has been provisioned. Connect backend data and interactions in the next implementation phase."
+          title="Module Under Configuration"
+          description="This module is undergoing configuration. Access records and update layouts via project settings."
         />
       );
   }

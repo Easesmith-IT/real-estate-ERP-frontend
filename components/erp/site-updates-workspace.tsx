@@ -224,11 +224,160 @@ export function SiteUpdatesWorkspace() {
     }
   }, [form.projectId, projectsQuery.data?.projects]);
 
+  const rawReports = query.data?.reports || [];
+  const reports = useMemo(() => {
+    return rawReports.slice().sort((left, right) => {
+      const leftTime = left.reportDate ? new Date(left.reportDate).getTime() : 0;
+      const rightTime = right.reportDate ? new Date(right.reportDate).getTime() : 0;
+      return rightTime - leftTime;
+    });
+  }, [rawReports]);
+
+  // Chart 1: Site Activity Trend (Last 30 Days)
+  const activityTrendData = useMemo(() => {
+    const data = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split("T")[0];
+      const matchReports = reports.filter(r => r.reportDate?.split("T")[0] === dateStr);
+      
+      data.push({
+        date: formatDate(dateStr).split(",")[0],
+        Updates: matchReports.length,
+        Photos: matchReports.length * 2 + (i % 3 === 0 ? 3 : 1),
+        Videos: i % 5 === 0 ? 1 : 0
+      });
+    }
+    return data;
+  }, [reports]);
+
+  // Chart 2: Project Activity Distribution
+  const projectDistributionData = useMemo(() => {
+    const counts: Record<string, number> = {};
+    reports.forEach(r => {
+      if (r.projectName) {
+        counts[r.projectName] = (counts[r.projectName] || 0) + 1;
+      }
+    });
+    return Object.entries(counts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
+  }, [reports]);
+
+  // Chart 3: Update Classification
+  const classificationData = useMemo(() => {
+    let normal = 0;
+    let concern = 0;
+    let escalation = 0;
+
+    reports.forEach(r => {
+      if (r.blockersLevel === "Critical" || r.blockersLevel === "High") {
+        escalation++;
+      } else if (r.blockersLevel === "Medium") {
+        concern++;
+      } else {
+        normal++;
+      }
+    });
+
+    return [
+      { name: "Normal", value: normal, color: "#22c55e" },
+      { name: "Concern", value: concern, color: "#f59e0b" },
+      { name: "Escalation", value: escalation, color: "#ef4444" }
+    ];
+  }, [reports]);
+
+  // Chart 4: Issue Category Breakdown
+  const issueCategoryData = useMemo(() => {
+    const projects = projectsQuery.data?.projects;
+    if (!projects) return [];
+    // Generate stacked counts for safety, quality, material, schedule, design
+    return projects.map((proj, idx) => {
+      const projectReports = reports.filter(r => r.projectId === proj.id);
+      let safety = 0;
+      let quality = 0;
+      let material = 0;
+      let schedule = 0;
+      let design = 0;
+
+      projectReports.forEach(r => {
+        const text = ((r.blockers || "") + " " + (r.progressSummary || "")).toLowerCase();
+        if (text.includes("safety") || text.includes("guard") || text.includes("hazard")) safety++;
+        if (text.includes("quality") || text.includes("crack") || text.includes("leak") || text.includes("rework")) quality++;
+        if (text.includes("material") || text.includes("cement") || text.includes("steel") || text.includes("supply")) material++;
+        if (text.includes("schedule") || text.includes("delay") || text.includes("timeline") || text.includes("late")) schedule++;
+        if (text.includes("design") || text.includes("architect") || text.includes("drawing") || text.includes("revision")) design++;
+      });
+
+      // Fallback baseline for visual styling
+      if (safety + quality + material + schedule + design === 0) {
+        safety = (idx % 2) + 1;
+        material = (idx % 3);
+        schedule = (idx % 2);
+      }
+
+      return {
+        name: proj.name,
+        Safety: safety,
+        Quality: quality,
+        Material: material,
+        Schedule: schedule,
+        Design: design
+      };
+    });
+  }, [reports, projectsQuery.data]);
+
+  // Section 5: Timeline Contribution Heatmap
+  const timelineHeatmap = useMemo(() => {
+    const days = [];
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split("T")[0];
+      const dayReports = reports.filter(r => r.reportDate?.split("T")[0] === dateStr);
+      const issues = dayReports.filter(r => r.blockersLevel && r.blockersLevel !== "None" && r.blockersLevel !== "Low").length;
+      
+      days.push({
+        date: d,
+        dateString: dateStr,
+        formatted: formatDate(dateStr),
+        volume: dayReports.length,
+        projects: Array.from(new Set(dayReports.map(r => r.projectName).filter(Boolean))),
+        issues
+      });
+    }
+    return days;
+  }, [reports]);
+
+  // Section 6: Project Activity Leaderboard
+  const projectLeaderboard = useMemo(() => {
+    const projects = projectsQuery.data?.projects;
+    if (!projects) return [];
+    return projects.map((proj) => {
+      const projectReports = reports.filter(r => r.projectId === proj.id);
+      const updates = projectReports.length;
+      const photos = projectReports.reduce((sum, r) => sum + (r.photos?.length || 0), 0) + (updates > 0 ? 4 : 0);
+      const issues = projectReports.filter(r => r.blockersLevel !== "None" && r.blockersLevel !== "Low").length;
+      const progress = projectReports.length > 0 ? Math.max(...projectReports.map(r => r.progressPercent || 0)) : 45; // default mock
+      
+      // Activity score: weighted calculation
+      const activityScore = Math.min(100, (updates * 10) + (photos * 5) - (issues * 15) + 60);
+
+      return {
+        id: proj.id,
+        name: proj.name,
+        updates,
+        photos,
+        issues,
+        progress,
+        activityScore: updates > 0 ? activityScore : 0
+      };
+    }).sort((a, b) => b.activityScore - a.activityScore);
+  }, [reports, projectsQuery.data]);
+
   if (query.isLoading || projectsQuery.isLoading) return <LoadingStateCard title="Loading site updates feed" />;
   if (query.error || projectsQuery.error || !query.data || !projectsQuery.data) return <ErrorStateCard message="Site intelligence data is unavailable." />;
-
-  const rawReports = query.data.reports || [];
-  const reports = rawReports.slice().sort((left, right) => new Date(right.reportDate).getTime() - new Date(left.reportDate).getTime());
 
   // Handle Form Submission
   const handleCreateSubmit = (e: React.FormEvent) => {
@@ -359,6 +508,7 @@ export function SiteUpdatesWorkspace() {
   // Section 1: Metrics
   const totalUpdatesCount = reports.length;
   const updatesThisWeekCount = reports.filter(r => {
+    if (!r.reportDate) return false;
     const diffTime = Math.abs(new Date().getTime() - new Date(r.reportDate).getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays <= 7;
@@ -371,142 +521,6 @@ export function SiteUpdatesWorkspace() {
   const avgHealthScore = average(reports.map(r => r.siteHealth || 90));
 
   // Section 4: Chart Data Generations
-  // Chart 1: Site Activity Trend (Last 30 Days)
-  const activityTrendData = useMemo(() => {
-    const data = [];
-    for (let i = 29; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split("T")[0];
-      const matchReports = reports.filter(r => r.reportDate.split("T")[0] === dateStr);
-      
-      data.push({
-        date: formatDate(dateStr).split(",")[0],
-        Updates: matchReports.length,
-        Photos: matchReports.length * 2 + (i % 3 === 0 ? 3 : 1),
-        Videos: i % 5 === 0 ? 1 : 0
-      });
-    }
-    return data;
-  }, [reports]);
-
-  // Chart 2: Project Activity Distribution
-  const projectDistributionData = useMemo(() => {
-    const counts: Record<string, number> = {};
-    reports.forEach(r => {
-      counts[r.projectName] = (counts[r.projectName] || 0) + 1;
-    });
-    return Object.entries(counts)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value);
-  }, [reports]);
-
-  // Chart 3: Update Classification
-  const classificationData = useMemo(() => {
-    let normal = 0;
-    let concern = 0;
-    let escalation = 0;
-
-    reports.forEach(r => {
-      if (r.blockersLevel === "Critical" || r.blockersLevel === "High") {
-        escalation++;
-      } else if (r.blockersLevel === "Medium") {
-        concern++;
-      } else {
-        normal++;
-      }
-    });
-
-    return [
-      { name: "Normal", value: normal, color: "#22c55e" },
-      { name: "Concern", value: concern, color: "#f59e0b" },
-      { name: "Escalation", value: escalation, color: "#ef4444" }
-    ];
-  }, [reports]);
-
-  // Chart 4: Issue Category Breakdown
-  const issueCategoryData = useMemo(() => {
-    // Generate stacked counts for safety, quality, material, schedule, design
-    return projectsQuery.data?.projects.map((proj, idx) => {
-      const projectReports = reports.filter(r => r.projectId === proj.id);
-      let safety = 0;
-      let quality = 0;
-      let material = 0;
-      let schedule = 0;
-      let design = 0;
-
-      projectReports.forEach(r => {
-        const text = (r.blockers + " " + r.progressSummary).toLowerCase();
-        if (text.includes("safety") || text.includes("guard") || text.includes("hazard")) safety++;
-        if (text.includes("quality") || text.includes("crack") || text.includes("leak") || text.includes("rework")) quality++;
-        if (text.includes("material") || text.includes("cement") || text.includes("steel") || text.includes("supply")) material++;
-        if (text.includes("schedule") || text.includes("delay") || text.includes("timeline") || text.includes("late")) schedule++;
-        if (text.includes("design") || text.includes("architect") || text.includes("drawing") || text.includes("revision")) design++;
-      });
-
-      // Fallback baseline for visual styling
-      if (safety + quality + material + schedule + design === 0) {
-        safety = (idx % 2) + 1;
-        material = (idx % 3);
-        schedule = (idx % 2);
-      }
-
-      return {
-        name: proj.name,
-        Safety: safety,
-        Quality: quality,
-        Material: material,
-        Schedule: schedule,
-        Design: design
-      };
-    }) || [];
-  }, [reports, projectsQuery.data]);
-
-  // Section 5: Timeline Contribution Heatmap
-  const timelineHeatmap = useMemo(() => {
-    const days = [];
-    for (let i = 13; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split("T")[0];
-      const dayReports = reports.filter(r => r.reportDate.split("T")[0] === dateStr);
-      const issues = dayReports.filter(r => r.blockersLevel && r.blockersLevel !== "None" && r.blockersLevel !== "Low").length;
-      
-      days.push({
-        date: d,
-        dateString: dateStr,
-        formatted: formatDate(dateStr),
-        volume: dayReports.length,
-        projects: Array.from(new Set(dayReports.map(r => r.projectName))),
-        issues
-      });
-    }
-    return days;
-  }, [reports]);
-
-  // Section 6: Project Activity Leaderboard
-  const projectLeaderboard = useMemo(() => {
-    return projectsQuery.data?.projects.map((proj) => {
-      const projectReports = reports.filter(r => r.projectId === proj.id);
-      const updates = projectReports.length;
-      const photos = projectReports.reduce((sum, r) => sum + (r.photos?.length || 0), 0) + (updates > 0 ? 4 : 0);
-      const issues = projectReports.filter(r => r.blockersLevel !== "None" && r.blockersLevel !== "Low").length;
-      const progress = projectReports.length > 0 ? Math.max(...projectReports.map(r => r.progressPercent || 0)) : 45; // default mock
-      
-      // Activity score: weighted calculation
-      const activityScore = Math.min(100, (updates * 10) + (photos * 5) - (issues * 15) + 60);
-
-      return {
-        id: proj.id,
-        name: proj.name,
-        updates,
-        photos,
-        issues,
-        progress,
-        activityScore: updates > 0 ? activityScore : 0
-      };
-    }).sort((a, b) => b.activityScore - a.activityScore) || [];
-  }, [reports, projectsQuery.data]);
 
   // Export mock trigger
   const handleExport = () => {
@@ -566,7 +580,7 @@ export function SiteUpdatesWorkspace() {
                   <div className="p-3 surface-secondary rounded-[var(--radius-input)]">
                     <p className="text-label text-text-muted">Updates Today</p>
                     <p className="text-section-title font-bold text-text-primary mt-1">
-                      {reports.filter(r => r.reportDate.split("T")[0] === new Date().toISOString().split("T")[0]).length || 3}
+                      {reports.filter(r => r.reportDate?.split("T")[0] === new Date().toISOString().split("T")[0]).length || 3}
                     </p>
                   </div>
                   <div className="p-3 surface-secondary rounded-[var(--radius-input)]">

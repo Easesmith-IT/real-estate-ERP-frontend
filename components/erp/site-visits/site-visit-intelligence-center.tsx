@@ -210,6 +210,7 @@ export function SiteVisitIntelligenceCenter() {
   }, [filteredVisits, currentPage, pageSize]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [deferredSearch, projectFilter, coordinatorFilter, statusFilter, dateFilter]);
 
@@ -573,7 +574,7 @@ export function SiteVisitIntelligenceCenter() {
       </div>
 
       {/* SECTION 2: Visit KPI Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {[
           { label: "Scheduled Visits", val: scheduledVisitsCount, trend: "+12%", tone: "info" as const, desc: "Active queues", icon: Clock },
           { label: "Completed Visits", val: completedVisitsCount, trend: "Stable", tone: "neutral" as const, desc: "Tours executed", icon: CheckCircle2 },
@@ -1293,7 +1294,7 @@ export function SiteVisitIntelligenceCenter() {
                         key={pageNum}
                         variant={currentPage === pageNum ? "primary" : "outline"}
                         size="sm"
-                        className="h-8 w-8 p-0 text-label"
+                        className="h-8 w-8 p-0 text-xs"
                         onClick={() => setCurrentPage(pageNum)}
                       >
                         {pageNum}

@@ -163,7 +163,7 @@ export function PipelineWorkspace() {
     usersQuery.isLoading ||
     customersQuery.isLoading
   ) {
-    return <LoadingStateCard title="Loading Revenue Pipeline Command Center..." />;
+    return <LoadingStateCard title="Loading Revenue Pipeline Dashboard..." />;
   }
 
   if (
@@ -205,7 +205,7 @@ export function PipelineWorkspace() {
     <section className="space-y-6 pb-16 animate-page-in">
       {/* Hero Header */}
       <SectionHeader
-        title="Revenue Pipeline Command Center"
+        title="Revenue Pipeline Dashboard"
         description="Monitor opportunity flow, conversion performance, sales velocity, forecasted revenue, and deal progression across all active projects."
         actions={
           <Badge tone="info" className="h-fit py-1 px-3 text-label">

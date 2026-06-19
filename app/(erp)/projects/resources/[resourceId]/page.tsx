@@ -186,7 +186,7 @@ export default function ResourceDetailPage() {
   };
 
   if (resourceLoading || projectsLoading) {
-    return <LoadingStateCard title="Loading Resource Intelligence Details" />;
+    return <LoadingStateCard title="Loading Resource Allocation Details" />;
   }
   if (resourceError || !resourceData) {
     return <ErrorStateCard message="Operation resource details are currently unavailable." />;
@@ -256,32 +256,34 @@ export default function ResourceDetailPage() {
   return (
     <section className="space-y-8 pb-12 animate-page-in">
       {/* HEADER SECTION */}
-      <div className="flex flex-col gap-4 border-b border-border-soft pb-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Link href="/projects/resources">
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <ArrowLeft className="h-4.5 w-4.5" />
-              </Button>
-            </Link>
-            <span className="text-label font-bold uppercase tracking-wider text-text-muted">Resource Intelligence Center</span>
-            <Badge tone="neutral">{resourceData.id}</Badge>
+      <div className="flex flex-col gap-5 border-b border-border-soft pb-5 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-start gap-3.5 min-w-0 flex-1">
+          <Link href="/projects/resources" className="mt-0.5">
+            <Button variant="secondary" size="sm" className="h-9 w-9 p-0 rounded-full shadow-soft hover:bg-hover inline-flex items-center justify-center shrink-0">
+              <ArrowLeft className="h-4.5 w-4.5" />
+            </Button>
+          </Link>
+          <div className="space-y-1.5 min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="text-label font-bold uppercase tracking-wider text-text-muted">Resource Management Console</span>
+              <Badge tone="neutral">{resourceData.id}</Badge>
+            </div>
+            <h1 className="text-page-title font-secondary font-bold tracking-tight text-text-primary">
+              {resourceData.resourceName}
+            </h1>
+            <p className="text-body text-text-secondary flex items-center gap-1.5 flex-wrap">
+              <HardHat className="h-4 w-4 text-accent-primary" />
+              <span>Category: {resourceData.type} ({resourceData.subType || "General"})</span>
+              <span className="text-text-muted">·</span>
+              <Building2 className="h-4 w-4" />
+              <span>Deployment Site: {resourceData.projectName}</span>
+              <span className="text-text-muted">·</span>
+              <Clock className="h-4 w-4" />
+              <span>Zone: {resourceData.assignedTo}</span>
+            </p>
           </div>
-          <h1 className="text-page-title font-secondary font-bold tracking-tight text-text-primary flex items-center gap-2">
-            {resourceData.resourceName}
-          </h1>
-          <p className="text-body text-text-secondary flex items-center gap-1.5 flex-wrap">
-            <HardHat className="h-4 w-4 text-accent-primary" />
-            <span>Category: {resourceData.type} ({resourceData.subType || "General"})</span>
-            <span className="text-text-muted">·</span>
-            <Building2 className="h-4 w-4" />
-            <span>Deployment Site: {resourceData.projectName}</span>
-            <span className="text-text-muted">·</span>
-            <Clock className="h-4 w-4" />
-            <span>Zone: {resourceData.assignedTo}</span>
-          </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap md:flex-nowrap items-center gap-2.5 shrink-0 self-start md:self-center md:justify-end">
           <Button onClick={() => setDrawerOpen(true)} className="text-white font-semibold gap-1.5">
             <Edit className="h-4.5 w-4.5" />
             <span>Edit Allocation</span>
@@ -290,7 +292,7 @@ export default function ResourceDetailPage() {
             <FileDown className="h-4.5 w-4.5" />
             <span>Export Details</span>
           </Button>
-          <Button variant="ghost" onClick={handleDelete} className="text-error hover:bg-error-soft/10 gap-1.5 font-medium border border-transparent hover:border-error-soft/25">
+          <Button variant="outline" onClick={handleDelete} className="text-error border-error/20 hover:bg-error/5 hover:text-error hover:border-error/30 gap-1.5 font-medium">
             <Trash2 className="h-4.5 w-4.5" />
             <span>Deallocate</span>
           </Button>

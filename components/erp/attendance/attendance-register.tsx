@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { EnterpriseTableLoader } from "@/components/ui/loaders";
 import { formatDateTime } from "@/lib/erp-utils";
 import { ChevronLeft, ChevronRight, UserCheck2 } from "lucide-react";
 
@@ -71,11 +72,7 @@ export function AttendanceRegister({
   };
 
   if (isLoading) {
-    return (
-      <div className="py-12 text-center text-text-secondary">
-        Loading register records...
-      </div>
-    );
+    return <EnterpriseTableLoader />;
   }
 
   const { page, limit, totalCount, pageCount } = pagination;

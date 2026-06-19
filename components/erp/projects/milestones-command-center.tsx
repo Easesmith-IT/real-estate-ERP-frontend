@@ -1025,15 +1025,15 @@ export function MilestonesCommandCenter() {
               <Badge tone="info">+5% vs Last Quarter</Badge>
             </div>
             <div className="space-y-3">
-              <h2 className="text-[40px] font-bold leading-[1.02] tracking-[-0.04em] text-text-primary">
-                Portfolio-wide milestone intelligence for leadership, PMO, and site delivery teams.
+              <h2 className="text-3xl font-bold leading-tight tracking-tight text-text-primary">
+                Portfolio wide milestone intelligence
               </h2>
               <p className="max-w-3xl text-body text-text-secondary">
                 Delivery cadence remains in the {summary.portfolioLabel.toLowerCase()} zone with {summary.projectsOnTrack} projects on track,
                 {` ${summary.delayed} delayed milestones, and ${approvalsQuery.data.summary.pending} pending approvals that need active command attention.`}
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4">
               <MetricTile label="Portfolio Milestones" value={`${summary.total}`} />
               <MetricTile label="Projects On Track" value={`${summary.projectsOnTrack}`} />
               <MetricTile label="Delayed Milestones" value={`${summary.delayed}`} emphasis="error" />
@@ -1042,14 +1042,16 @@ export function MilestonesCommandCenter() {
           </div>
 
           <div className="rounded-[28px] border border-border-soft bg-white/80 p-5 shadow-floating backdrop-blur">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center justify-between gap-4 border-b border-border-soft/60 pb-3">
               <div>
-                <p className="text-label uppercase tracking-[0.16em] text-text-muted">Delivery Health Score</p>
-                <p className="mt-1 text-section-title text-text-primary">{summary.portfolioLabel}</p>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Delivery Health Score</p>
+                <p className="mt-1 text-xl font-extrabold text-text-primary leading-none">{summary.portfolioLabel}</p>
               </div>
-              <Badge tone={summary.portfolioTone}>91 / 100 target view</Badge>
+              <Badge tone={summary.portfolioTone} className="whitespace-nowrap shrink-0 text-[10px] px-2.5 py-1 font-semibold">
+                Target: 91/100
+              </Badge>
             </div>
-            <div className="mt-6 flex flex-col items-center">
+            <div className="mt-4 flex flex-col items-center">
               <div className="relative flex h-[212px] w-[212px] items-center justify-center sm:h-[224px] sm:w-[224px]">
                 <svg className="h-[200px] w-[200px] -rotate-90 sm:h-[212px] sm:w-[212px]" viewBox="0 0 220 220">
                   <circle cx="110" cy="110" r="92" stroke="rgba(148,163,184,0.15)" strokeWidth="18" fill="none" />

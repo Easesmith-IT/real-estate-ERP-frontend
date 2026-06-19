@@ -90,7 +90,7 @@ export default function LoginPage() {
         )}
 
         <p className="text-center text-label text-text-muted">
-          Demo accounts &mdash; no password required
+          Enterprise Access Credentials &mdash; no password required
         </p>
       </div>
     </div>

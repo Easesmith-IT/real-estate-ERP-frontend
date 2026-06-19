@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   BadgeCheck,
@@ -269,6 +270,7 @@ function ChartCard({
 
 export function DashboardWorkspace() {
   const role = useUiStore((state) => state.role);
+  const sidebarCollapsed = useUiStore((state) => state.sidebarCollapsed);
   const [portfolio, setPortfolio] = useState("All Projects");
 
   const dashboardQuery = useQuery({
@@ -314,8 +316,8 @@ export function DashboardWorkspace() {
   return (
     <section className="space-y-8">
       <SectionHeader
-        title="Construction Operations Command Center"
-        description="Executive visibility, live operational intelligence, financial signal quality, and action orchestration for construction leadership demos."
+        title="Executive Operations Dashboard"
+        description="Centralized monitoring of portfolio performance, operational risk, workforce utilization, procurement activity, and financial outcomes."
         actions={
           <div className="flex items-center gap-3">
             <select
@@ -336,38 +338,33 @@ export function DashboardWorkspace() {
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-6">
           <Card className="overflow-hidden border border-accent-primary/15 bg-linear-to-br from-white via-white to-accent-primary/8">
-            <CardContent className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-[1.2fr_360px] lg:items-center">
-              <div className="space-y-5">
+            <CardContent className={`grid gap-6 p-6 ${sidebarCollapsed ? "grid-cols-1 lg:grid-cols-[3fr_2fr] lg:items-center" : "grid-cols-1"}`}>
+              {/* Header and narrative */}
+              <motion.div
+                layout
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                className={`space-y-5 ${sidebarCollapsed ? "lg:col-start-1 lg:row-start-1" : ""}`}
+              >
                 <div className="flex flex-wrap items-center gap-3">
-                  <Badge tone={badgeToneFromStatus(overview.portfolio.tone)}>Portfolio Health Score</Badge>
+                  <Badge tone={badgeToneFromStatus(overview.portfolio.tone)}>Portfolio Health Index</Badge>
                   <p className="text-label text-text-muted">{portfolio}</p>
                 </div>
                 <div className="space-y-3">
-                  <h2 className="max-w-3xl text-[40px] font-bold leading-[1.02] tracking-[-0.04em] text-text-primary">
-                    Run the entire construction portfolio from one intelligent operating screen.
-                  </h2>
                   <p className="max-w-3xl text-body text-text-secondary">{overview.portfolio.narrative}</p>
                 </div>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {overview.executiveKpis.map((metric) => {
-                    const icon =
-                      metric.id === "active-projects" ? <Building2 className="h-5 w-5" /> :
-                      metric.id === "workforce-active" ? <Users className="h-5 w-5" /> :
-                      metric.id === "inventory-value" ? <PackageOpen className="h-5 w-5" /> :
-                      <IndianRupee className="h-5 w-5" />;
+              </motion.div>
 
-                    return <MetricCard key={metric.id} metric={metric} icon={icon} />;
-                  })}
-                </div>
-              </div>
-
-              <div className="rounded-[28px] border border-border-soft bg-white/80 p-5 shadow-floating backdrop-blur">
+              {/* Radial Chart (Portfolio Health Index) */}
+              <motion.div
+                layout
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                className={`rounded-[28px] border border-border-soft bg-white/80 p-5 shadow-floating backdrop-blur ${sidebarCollapsed ? "lg:col-start-2 lg:row-start-1 lg:row-span-2" : "w-full"}`}
+              >
                 <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-label uppercase tracking-[0.16em] text-text-muted">Business Health Score</p>
-                    {/* <p className="mt-1 text-section-title text-text-primary">Premium demo visibility</p> */}
+                  <div className="min-w-0">
+                    <p className="text-label uppercase tracking-[0.16em] text-text-muted whitespace-nowrap">Portfolio Health Index</p>
                   </div>
-                  <Badge tone={overview.portfolio.healthDelta >= 0 ? "success" : "warning"}>
+                  <Badge className="shrink-0 whitespace-nowrap" tone={overview.portfolio.healthDelta >= 0 ? "success" : "warning"}>
                     {overview.portfolio.healthDelta >= 0 ? "+" : ""}
                     {overview.portfolio.healthDelta}% vs last month
                   </Badge>
@@ -407,7 +404,24 @@ export function DashboardWorkspace() {
                     <p className="mt-1 text-card-title text-error">{projectHealth.summary.criticalProjects}</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
+
+              {/* 4 KPI Cards Grid */}
+              <motion.div
+                layout
+                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                className={`grid grid-cols-1 gap-4 md:grid-cols-2 ${sidebarCollapsed ? "lg:col-start-1 lg:row-start-2" : ""}`}
+              >
+                {overview.executiveKpis.map((metric) => {
+                  const icon =
+                    metric.id === "active-projects" ? <Building2 className="h-5 w-5" /> :
+                    metric.id === "workforce-active" ? <Users className="h-5 w-5" /> :
+                    metric.id === "inventory-value" ? <PackageOpen className="h-5 w-5" /> :
+                    <IndianRupee className="h-5 w-5" />;
+
+                  return <MetricCard key={metric.id} metric={metric} icon={icon} />;
+                })}
+              </motion.div>
             </CardContent>
           </Card>
 
@@ -425,9 +439,9 @@ export function DashboardWorkspace() {
           <Card className="overflow-hidden">
             <CardHeader className="items-start border-none pb-0">
               <div className="space-y-2">
-                <CardTitle>Project Health Center</CardTitle>
+                <CardTitle>Project Delivery Health</CardTitle>
                 <p className="text-body text-text-secondary">
-                  Visual project intelligence replaces tables with schedule confidence, risk signals, and milestone posture.
+                  Project schedule compliance, active risk indicators, and milestone status tracking.
                 </p>
               </div>
             </CardHeader>
@@ -502,7 +516,7 @@ export function DashboardWorkspace() {
           <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[1.45fr_1fr]">
             <ChartCard
               title="Revenue vs Collections"
-              description="Dual-axis revenue and collection visibility across the last 12 months."
+              description="Comparative analysis of monthly revenue generation and collections performance."
             >
               <div className="h-[360px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -530,14 +544,14 @@ export function DashboardWorkspace() {
               <div className="mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4">
                 <SignalTile label="Revenue" value={formatCompactCurrency(overview.revenueCollections.totals.revenue)} tone="blue" />
                 <SignalTile label="Collections" value={formatCompactCurrency(overview.revenueCollections.totals.collections)} tone="green" />
-                <SignalTile label="Collection Rate" value={`${overview.revenueCollections.totals.collectionRate}%`} tone="amber" />
+                <SignalTile label="Collection Efficiency" value={`${overview.revenueCollections.totals.collectionRate}%`} tone="amber" />
                 <SignalTile label="Overdue Exposure" value={formatCompactCurrency(overview.revenueCollections.totals.overdueAmount)} tone="red" />
               </div>
             </ChartCard>
 
             <ChartCard
               title="Collections Aging"
-              description="Stacked collection-risk exposure split by North and South portfolios."
+              description="Accounts receivable aging analysis categorized by operating zones."
             >
               <div className="h-[360px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -561,9 +575,9 @@ export function DashboardWorkspace() {
           <Card className="overflow-hidden">
             <CardHeader className="items-start border-none pb-0">
               <div className="space-y-2">
-                <CardTitle>Operations Intelligence Center</CardTitle>
+                <CardTitle>Operational Insights</CardTitle>
                 <p className="text-body text-text-secondary">
-                  Intelligent recommendation lanes focused on sales opportunity, material risk, collections pressure, approvals, and schedule risk.
+                  Operational recommendation workflows focused on sales risk, material supply, collections aging, workflow approvals, and schedule variance.
                 </p>
               </div>
             </CardHeader>
@@ -599,12 +613,12 @@ export function DashboardWorkspace() {
 
           <div className="space-y-6">
             <SectionHeader
-              title="Analytics Center"
-              description="Graphic-heavy funnel, trend, utilization, inventory, and project-value views for premium demo storytelling."
+              title="Portfolio Analytics"
+              description="Analytical visualizations of lead conversion funnels, pipeline trends, resource utilization, and inventory metrics."
             />
 
             <div className="grid grid-cols-1 gap-6 2xl:grid-cols-2">
-              <ChartCard title="Lead Funnel" description="Stage-by-stage commercial drop-off and closure flow.">
+              <ChartCard title="Lead Funnel" description="Conversion velocity through sales and pipeline stages.">
                 <div className="h-[320px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <FunnelChart>
@@ -617,7 +631,7 @@ export function DashboardWorkspace() {
                 </div>
               </ChartCard>
 
-              <ChartCard title="Monthly Lead Trend" description="Last 6 months of pipeline inflow velocity.">
+              <ChartCard title="Monthly Lead Trend" description="Inflow volume of registered opportunities over a six-month period.">
                 <div className="h-[320px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={analytics.monthlyLeadTrend} margin={{ top: 12, right: 12, left: 0, bottom: 0 }}>
@@ -637,7 +651,7 @@ export function DashboardWorkspace() {
                 </div>
               </ChartCard>
 
-              <ChartCard title="Workforce Utilization" description="Active, idle, and on-leave workforce posture.">
+              <ChartCard title="Workforce Utilization" description="Distribution of active, unassigned, and absent personnel.">
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr] lg:items-center">
                   <div className="h-[220px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -666,7 +680,7 @@ export function DashboardWorkspace() {
                 </div>
               </ChartCard>
 
-              <ChartCard title="Inventory Distribution" description="Material stock mix across core categories.">
+              <ChartCard title="Inventory Distribution" description="Stock valuation breakdown by material category.">
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr] lg:items-center">
                   <div className="h-[220px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -696,7 +710,7 @@ export function DashboardWorkspace() {
               </ChartCard>
             </div>
 
-            <ChartCard title="Top Projects by Value" description="Highest-value projects in the active portfolio.">
+            <ChartCard title="Top Projects by Value" description="Valuation of active projects ranked by budget allocation.">
               <div className="h-[340px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={analytics.topProjectsByValue} layout="vertical" margin={{ top: 8, right: 12, left: 16, bottom: 8 }}>
@@ -714,9 +728,9 @@ export function DashboardWorkspace() {
           <Card className="overflow-hidden">
             <CardHeader className="items-start border-none pb-0">
               <div className="space-y-2">
-                <CardTitle>Live Activity Feed</CardTitle>
+                <CardTitle>Operational Activity Log</CardTitle>
                 <p className="text-body text-text-secondary">
-                  Real-time style operational timeline across attendance, DPRs, approvals, leads, and material movement.
+                  Audit log of field reports, procurement approvals, lead registration, and inventory transactions.
                 </p>
               </div>
             </CardHeader>
@@ -756,8 +770,8 @@ export function DashboardWorkspace() {
           <Card className="overflow-hidden border border-accent-primary/15 bg-linear-to-br from-white via-white to-accent-primary/8">
             <CardHeader className="items-start border-none pb-0">
               <div className="space-y-2">
-                <CardTitle>Action Center</CardTitle>
-                <p className="text-body text-text-secondary">Sticky execution panel for approvals, procurement, and quick operating moves.</p>
+                <CardTitle>Executive Actions</CardTitle>
+                <p className="text-body text-text-secondary">Action items requiring approval, authorization, or operational response.</p>
               </div>
             </CardHeader>
             <CardContent className="space-y-4 pt-5">
@@ -789,17 +803,17 @@ export function DashboardWorkspace() {
           <Card className="overflow-hidden">
             <CardHeader className="items-start border-none pb-0">
               <div className="space-y-2">
-                <CardTitle>Leadership Snapshot</CardTitle>
-                <p className="text-body text-text-secondary">Fast executive context for the next meeting, review, or investor demo.</p>
+                <CardTitle>Executive Performance Snapshot</CardTitle>
+                <p className="text-body text-text-secondary">Summary metrics for executive reviews, operational alignment, and stakeholder briefings.</p>
               </div>
             </CardHeader>
             <CardContent className="space-y-4 pt-5">
               <SignalTile label="Critical Project" value={criticalProject?.name || "Stable"} tone="red" />
               <SignalTile label="Collections at Risk" value={formatCompactCurrency(overview.revenueCollections.totals.overdueAmount)} tone="amber" />
               <SignalTile label="Vendor Approvals" value={new Intl.NumberFormat("en-IN").format(overview.actionCenter.counts[3]?.value || 0)} tone="blue" />
-              <SignalTile label="Live Feed Events" value={new Intl.NumberFormat("en-IN").format(activityFeed.items.length)} tone="green" />
+              <SignalTile label="Activity Log Entries" value={new Intl.NumberFormat("en-IN").format(activityFeed.items.length)} tone="green" />
               <div className="rounded-[20px] border border-border-soft bg-surface-secondary p-4">
-                <p className="text-label uppercase tracking-[0.14em] text-text-muted">Immediate Narrative</p>
+                <p className="text-label uppercase tracking-[0.14em] text-text-muted">Operational Summary</p>
                 <p className="mt-2 text-body text-text-secondary">
                   Health score is {overview.portfolio.healthScore}/100, collections are at {overview.revenueCollections.totals.collectionRate}% of revenue this month, and the top risk sits in {criticalProject?.name || "the active portfolio"}.
                 </p>

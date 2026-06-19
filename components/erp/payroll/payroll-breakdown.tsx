@@ -53,7 +53,7 @@ export function PayrollBreakdown({ data, isLoading }: PayrollBreakdownProps) {
           <p className="text-label text-text-muted">Operational cost mix breakdown across primary departments.</p>
         </CardHeader>
         
-        <CardContent className="space-y-6">
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Donut Chart Visualization */}
           <div className="h-44 relative flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
@@ -113,7 +113,7 @@ export function PayrollBreakdown({ data, isLoading }: PayrollBreakdownProps) {
 
       <div className="p-6 pt-0 mt-6 border-t border-border-soft space-y-3 bg-surface-secondary/10 rounded-b-[var(--radius-input)]">
         <p className="text-label font-bold text-text-primary uppercase tracking-wider mt-4">Department Cost Allocations</p>
-        <div className="grid grid-cols-1 gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
           {allocationCards.slice(0, 3).map((item) => (
             <div key={item.department} className="flex items-center justify-between rounded-lg border border-border-soft bg-surface-primary p-2.5">
               <div className="flex items-center gap-2">

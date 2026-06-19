@@ -539,7 +539,7 @@ export function DailyReportsWorkspace() {
     const activeSites = new Set(reports.map((r) => r.projectId)).size;
     
     const todayStr = new Date().toISOString().split("T")[0];
-    const reportsSubmittedToday = reports.filter((r) => r.reportDate.startsWith(todayStr) || r.reportDate.startsWith("2026-06-13")).length;
+    const reportsSubmittedToday = reports.filter((r) => r.reportDate?.startsWith(todayStr) || r.reportDate?.startsWith("2026-06-13")).length;
     const openSiteRisks = reports.filter((r) => r.blockersLevel === "High" || r.blockersLevel === "Critical").length;
     
     const avgProductivity = reports.length > 0 
@@ -723,7 +723,7 @@ export function DailyReportsWorkspace() {
     }
 
     if (dateFilter) {
-      list = list.filter((r) => r.reportDate.startsWith(dateFilter));
+      list = list.filter((r) => r.reportDate?.startsWith(dateFilter));
     }
 
     return list;
@@ -794,8 +794,8 @@ export function DailyReportsWorkspace() {
     }
   };
 
-  if (projectsQuery.isLoading || reportsQuery.isLoading) return <LoadingStateCard title="Loading Site Operations Intelligence" />;
-  if (projectsQuery.error || reportsQuery.error || !projectsQuery.data || !reportsQuery.data) return <ErrorStateCard message="Operation intelligence data is unavailable." />;
+  if (projectsQuery.isLoading || reportsQuery.isLoading) return <LoadingStateCard title="Loading Site Operations Performance" />;
+  if (projectsQuery.error || reportsQuery.error || !projectsQuery.data || !reportsQuery.data) return <ErrorStateCard message="Site operations performance metrics are unavailable." />;
 
   return (
     <section className="space-y-8 pb-12">
@@ -803,7 +803,7 @@ export function DailyReportsWorkspace() {
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border-soft pb-5">
         <div className="space-y-1.5">
           <h1 className="text-page-title font-secondary font-bold tracking-tight text-text-primary">
-            Construction Site Intelligence Center
+            Construction Site Operations Panel
           </h1>
           <p className="max-w-4xl text-body text-text-secondary">
             Monitor daily site activity, workforce productivity, material consumption, project progress, and operational risks across all active projects.
@@ -979,10 +979,10 @@ export function DailyReportsWorkspace() {
         />
       </div>
 
-      {/* SECTION 3 - SITE INTELLIGENCE CENTER (Recommendation cards) */}
+      {/* SECTION 3 - SITE PERFORMANCE CENTER (Recommendation cards) */}
       <div className="space-y-4">
         <h2 className="text-section-title font-secondary font-bold tracking-tight text-text-primary">
-          Site Intelligence Center Recommendations
+          Site Performance Center Recommendations
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
           <Card className="border-l-4 border-l-warning border-border-soft bg-surface shadow-soft hover:shadow-medium transition-all">
@@ -1232,10 +1232,10 @@ export function DailyReportsWorkspace() {
         </Card>
       </div>
 
-      {/* SECTION 6 & 7 LAYOUT: TIMELINE + REGISTER */}
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_2.5fr]">
+      {/* SECTION 6 & 7 LAYOUT: REGISTER + TIMELINE */}
+      <div className="flex flex-col gap-6">
         {/* SECTION 6: DAILY ACTIVITY TIMELINE */}
-        <div className="space-y-4">
+        <div className="space-y-4 order-2">
           <h2 className="text-section-title font-secondary font-bold tracking-tight text-text-primary">
             Daily Activity Timeline
           </h2>
@@ -1300,7 +1300,7 @@ export function DailyReportsWorkspace() {
         </div>
 
         {/* SECTION 7: DAILY REPORT REGISTER */}
-        <div className="space-y-4">
+        <div className="space-y-4 order-1">
           <h2 className="text-section-title font-secondary font-bold tracking-tight text-text-primary">
             Daily Report Register
           </h2>
@@ -1854,7 +1854,7 @@ export function DailyReportsWorkspace() {
               <span>Site Media & Engineering Remarks</span>
             </h3>
             <div className="space-y-1.5">
-              <label className="text-label text-text-secondary font-medium">Photo Uploads (Simulation)</label>
+              <label className="text-label text-text-secondary font-medium">Photo Uploads</label>
               <Input
                 type="text"
                 placeholder="Comma separated image paths, e.g. /images/site1.jpg, /images/site2.jpg"
@@ -2375,8 +2375,8 @@ export function VendorsWorkspace() {
       .slice(0, 5);
   }, [vendors, ordersQuery.data]);
 
-  if (query.isLoading) return <LoadingStateCard title="Loading Vendor Intelligence Center" />;
-  if (query.error) return <ErrorStateCard message="Vendor intelligence records are currently offline." />;
+  if (query.isLoading) return <LoadingStateCard title="Loading Vendor Performance Center" />;
+  if (query.error) return <ErrorStateCard message="Vendor performance records are currently offline." />;
 
   return (
     <section className="space-y-6">
@@ -2384,7 +2384,7 @@ export function VendorsWorkspace() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <h1 className="text-page-title font-secondary text-text-primary">Vendor Intelligence Center</h1>
+            <h1 className="text-page-title font-secondary text-text-primary">Vendor Performance Center</h1>
             <Badge tone="info" className="px-2.5 py-0.5 text-xs font-semibold">{totalCount} Total</Badge>
           </div>
           <p className="max-w-3xl text-body text-text-secondary">
@@ -2417,12 +2417,12 @@ export function VendorsWorkspace() {
             });
             setIsDrawerOpen(true);
           }} className="flex items-center gap-1.5">
-            <Plus className="h-4 w-4" /> Add Vendor
+            <Plus className="h-4 w-4" /> Register Vendor
           </Button>
         </div>
       </div>
 
-      {/* 2. VENDOR INTELLIGENCE KPIs (8 Premium cards) */}
+      {/* 2. VENDOR PERFORMANCE KPIs (8 KPI cards) */}
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4">
         <Card className="border border-border-soft p-4 shadow-soft">
           <div className="space-y-1">
@@ -2619,12 +2619,12 @@ export function VendorsWorkspace() {
         </Card>
       </div>
 
-      {/* RIGHT SIDE PANEL — Supplier Intelligence Alerts */}
+      {/* RIGHT SIDE PANEL — Supplier Performance Alerts */}
       <div className="space-y-5">
         <Card className="border border-border-soft shadow-soft overflow-hidden">
           <CardHeader className="border-b border-border-soft/50 px-5 py-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xs font-bold uppercase tracking-wider text-text-primary">Supplier Intelligence</CardTitle>
+              <CardTitle className="text-xs font-bold uppercase tracking-wider text-text-primary">Supplier Performance</CardTitle>
               <ShieldAlert className="h-4 w-4 text-text-muted" />
             </div>
           </CardHeader>
@@ -2679,7 +2679,7 @@ export function VendorsWorkspace() {
           </CardHeader>
           <CardContent className="px-4 py-4 space-y-2">
             <Button variant="secondary" className="w-full justify-start gap-2 text-xs h-9" onClick={handleRefresh}>
-              <RefreshCcw className="h-3.5 w-3.5" /> Refresh Intelligence
+              <RefreshCcw className="h-3.5 w-3.5" /> Refresh Performance Data
             </Button>
             <Button variant="secondary" className="w-full justify-start gap-2 text-xs h-9" onClick={handleExport}>
               <Download className="h-3.5 w-3.5" /> Export Vendor Report
@@ -3478,7 +3478,7 @@ export function PurchaseOrdersWorkspace() {
   }, [form.projectId, projectsQuery.data?.projects]);
 
   if (query.isLoading || requestsQuery.isLoading || vendorsQuery.isLoading || projectsQuery.isLoading) {
-    return <LoadingStateCard title="Loading Procurement Command Center..." variant="dashboard" />;
+    return <LoadingStateCard title="Loading Procurement Operations Dashboard..." variant="dashboard" />;
   }
 
   if (query.error || requestsQuery.error || vendorsQuery.error || projectsQuery.error || !query.data || !requestsQuery.data || !vendorsQuery.data || !projectsQuery.data) {
@@ -3622,9 +3622,9 @@ export function PurchaseOrdersWorkspace() {
       {/* SECTION 1: Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border-soft pb-5">
         <div>
-          <h1 className="text-page-title font-bold text-text-primary">Purchase Orders Command Center</h1>
+          <h1 className="text-page-title font-bold text-text-primary">Purchase Orders Dashboard</h1>
           <p className="text-body text-text-secondary mt-1">
-            Monitor committed spend, vendor performance, delivery schedules, and purchasing intelligence.
+            Monitor committed spend, vendor performance, delivery schedules, and procurement analytics.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -3676,7 +3676,7 @@ export function PurchaseOrdersWorkspace() {
         ))}
       </div>
 
-      {/* SECTION 3: ORDER INTELLIGENCE CENTER */}
+      {/* SECTION 3: PROCUREMENT PERFORMANCE OVERVIEW */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Left: Health Donut */}
         <Card className="surface-card">
@@ -3721,11 +3721,11 @@ export function PurchaseOrdersWorkspace() {
           </CardContent>
         </Card>
 
-        {/* Right: AI Intelligence Panel */}
+        {/* Right: Procurement Insights Panel */}
         <Card className="surface-card">
           <CardHeader className="border-b border-border-soft pb-3 flex items-center justify-between">
-            <CardTitle className="text-section-title">Procurement Intelligence Panel</CardTitle>
-            <Badge tone="neutral" className="gap-1 text-[11px]"><Zap className="h-3.5 w-3.5 text-amber-500 fill-amber-500" /> AI Insights</Badge>
+            <CardTitle className="text-section-title">Procurement Insights Panel</CardTitle>
+            <Badge tone="neutral" className="gap-1 text-[11px]"><Zap className="h-3.5 w-3.5 text-amber-500 fill-amber-500" /> Sourcing Advisory</Badge>
           </CardHeader>
           <CardContent className="pt-4 space-y-4 max-h-[260px] overflow-y-auto">
             <div className="p-3 border-l-4 border-error bg-error/5 rounded-r-xl flex items-start gap-3">
@@ -5619,7 +5619,11 @@ export function SiteUpdatesWorkspace() {
   if (query.isLoading || projectsQuery.isLoading) return <LoadingStateCard title="Loading site updates" />;
   if (query.error || projectsQuery.error || !query.data || !projectsQuery.data) return <ErrorStateCard message="Site update data is unavailable." />;
 
-  const reports = query.data.reports.slice().sort((left, right) => new Date(right.reportDate).getTime() - new Date(left.reportDate).getTime());
+  const reports = query.data.reports.slice().sort((left, right) => {
+    const leftTime = left.reportDate ? new Date(left.reportDate).getTime() : 0;
+    const rightTime = right.reportDate ? new Date(right.reportDate).getTime() : 0;
+    return rightTime - leftTime;
+  });
 
   return (
     <section className="space-y-6">
@@ -5705,7 +5709,11 @@ export function ProjectInsightsWorkspace() {
     const projectResources = resourcesQuery.data.resources.filter((item) => item.projectId === project.id);
     const projectMaterials = materialsQuery.data.materials.filter((item) => item.projectId === project.id);
     const projectReports = reportsQuery.data.reports.filter((report) => report.projectId === project.id);
-    const latestReport = projectReports.slice().sort((left, right) => new Date(right.reportDate).getTime() - new Date(left.reportDate).getTime())[0];
+    const latestReport = projectReports.slice().sort((left, right) => {
+      const leftTime = left.reportDate ? new Date(left.reportDate).getTime() : 0;
+      const rightTime = right.reportDate ? new Date(right.reportDate).getTime() : 0;
+      return rightTime - leftTime;
+    })[0];
 
     return {
       projectName: project.name,
@@ -6500,7 +6508,7 @@ export function WorkforceInsightsWorkspace() {
     attendanceAnalyticsQuery.isLoading ||
     payrollQuery.isLoading
   ) {
-    return <LoadingStateCard title="Loading Workforce Command Center" />;
+    return <LoadingStateCard title="Loading Workforce Console" />;
   }
 
   if (
@@ -6515,7 +6523,7 @@ export function WorkforceInsightsWorkspace() {
     !attendanceAnalyticsQuery.data ||
     !payrollQuery.data
   ) {
-    return <ErrorStateCard message="Workforce Command Center data is unavailable." />;
+    return <ErrorStateCard message="Workforce Console data is unavailable." />;
   }
 
   // Calculate Health Score
@@ -6750,7 +6758,7 @@ export function WorkforceInsightsWorkspace() {
     let csvContent = "";
     
     // Header Section
-    csvContent += "WORKFORCE OPERATIONS INTELLIGENCE BRIEF\n";
+    csvContent += "WORKFORCE OPERATIONS SUMMARY BRIEF\n";
     csvContent += `Generated At: ,${new Date().toLocaleString()}\n\n`;
     
     // Summary Table
@@ -6806,7 +6814,7 @@ export function WorkforceInsightsWorkspace() {
       {/* Section 1 - Workforce Health Hero */}
       <div className="flex flex-col gap-3">
         <SectionHeader
-          title="Workforce Command Center"
+          title="Workforce Console"
           description="Monitor workforce health, staffing efficiency, attendance performance, payroll impact, and project deployment across all active operations."
           actions={
             <div className="flex items-center gap-2 no-print">
@@ -6979,15 +6987,15 @@ export function WorkforceInsightsWorkspace() {
         </div>
       </div>
 
-      {/* Section 3 - Workforce Intelligence Center */}
+      {/* Section 3 - Workforce Insights Panel */}
       <Card className="border-border-soft overflow-hidden shadow-soft">
         <CardHeader className="bg-linear-to-r from-accent-primary/5 to-accent-secondary/5 border-b border-border-soft pb-4">
           <div className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-accent-primary animate-pulse" />
-            <CardTitle className="text-base font-bold">Workforce Intelligence Center</CardTitle>
+            <CardTitle className="text-base font-bold">Workforce Insights Panel</CardTitle>
           </div>
           <p className="text-xs text-text-secondary mt-1">
-            Real-time operational alerts, workforce risks, and hiring forecast recommendations powered by Nimbus intelligence.
+            Real-time operational alerts, workforce risks, and hiring forecast recommendations powered by advanced analytics.
           </p>
         </CardHeader>
         <CardContent className="p-6">
@@ -7239,9 +7247,9 @@ export function WorkforceInsightsWorkspace() {
         </div>
       </div>
 
-      {/* Section 5 - Attendance Intelligence */}
+      {/* Section 5 - Attendance Analytics */}
       <div className="space-y-4">
-        <h2 className="text-lg font-bold text-text-primary tracking-tight">Attendance Intelligence</h2>
+        <h2 className="text-lg font-bold text-text-primary tracking-tight">Attendance Analytics</h2>
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Department Attendance Health */}
           <Card className="overflow-hidden hover:shadow-soft transition-all duration-200">
@@ -7315,9 +7323,9 @@ export function WorkforceInsightsWorkspace() {
         </div>
       </div>
 
-      {/* Section 6 - Payroll & Cost Intelligence */}
+      {/* Section 6 - Payroll & Cost Analytics */}
       <div className="space-y-4">
-        <h2 className="text-lg font-bold text-text-primary tracking-tight">Payroll & Cost Intelligence</h2>
+        <h2 className="text-lg font-bold text-text-primary tracking-tight">Payroll & Cost Analytics</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Monthly Payroll Trend */}
           <Card className="overflow-hidden hover:shadow-soft transition-all duration-200">
@@ -7545,10 +7553,10 @@ export function WorkforceInsightsWorkspace() {
         </div>
       </div>
 
-      {/* Section 9 - Trade Coverage Intelligence */}
+      {/* Section 9 - Trade Coverage Performance */}
       <Card className="border border-border-soft shadow-soft">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-text-primary">Trade Coverage & Utilization Intelligence</CardTitle>
+          <CardTitle className="text-sm font-semibold text-text-primary">Trade Coverage & Utilization Performance</CardTitle>
           <p className="text-xs text-text-muted">Allocation comparison and capacity utilization percentages for contractor trades.</p>
         </CardHeader>
         <CardContent className="p-6">

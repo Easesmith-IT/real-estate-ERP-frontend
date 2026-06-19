@@ -417,7 +417,7 @@ export function ApprovalQueueWorkspace() {
 
   // Loading indicator from loader UI
   if (query.isLoading) {
-    return <EnterprisePageLoader title="Loading Approvals Command Center" variant="dashboard" />;
+    return <EnterprisePageLoader title="Loading Approvals Console" variant="dashboard" />;
   }
 
   if (query.error || !query.data || !kpis) {
@@ -436,7 +436,7 @@ export function ApprovalQueueWorkspace() {
       {/* SECTION 1: HEADER */}
       <div className="flex flex-col gap-5 border-b border-border-soft pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-page-title font-secondary text-text-primary">Approvals Command Center</h1>
+          <h1 className="text-page-title font-secondary text-text-primary">Approvals Console</h1>
           <p className="mt-1.5 text-body text-text-muted">
             Monitor approval workflows, SLA compliance, procurement releases, financial approvals, and operational requests across the organization.
           </p>

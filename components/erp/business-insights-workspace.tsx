@@ -242,7 +242,7 @@ export function BusinessInsightsWorkspace() {
         { id: 2, name: "Heritage Villa Phase 2 Block B", source: "Direct Referral", value: 38000000, quality: "High (9.2)", stage: "Site Visit Scheduled", days: 8, manager: "Vikram R." },
         { id: 3, name: "Emerald Hub Retail Spaces", source: "Website Form", value: 18000000, quality: "Medium (5.5)", stage: "Contacted", days: 22, manager: "Sneha P." },
         { id: 4, name: "Horizon Tower Duplex Unit 401", source: "Digital Campaign", value: 29000000, quality: "Medium (6.1)", stage: "Interested", days: 19, manager: "Vikram R." },
-        { id: 5, name: "Park View 3BHK Premium Units", source: "Broker (Global Assets)", value: 65000000, quality: "High (8.5)", stage: "Negotiation", days: 5, manager: "Amit S." },
+        { id: 5, name: "Park View 3BHK Prime Units", source: "Broker (Global Assets)", value: 65000000, quality: "High (8.5)", stage: "Negotiation", days: 5, manager: "Amit S." },
         { id: 6, name: "Silicon Space Co-working Hall", source: "Walk-in", value: 12000000, quality: "Low (3.4)", stage: "New Lead", days: 31, manager: "Sneha P." },
         { id: 7, name: "Emerald Hub Office Blocks", source: "Broker (Prime Realtors)", value: 54000000, quality: "High (9.0)", stage: "Booking Stage", days: 11, manager: "Amit S." }
       ]
@@ -308,7 +308,7 @@ export function BusinessInsightsWorkspace() {
       tableData: [
         { id: 1, poNumber: "PO-2026-904", material: "Structural Reinforcement Steel", vendor: "SteelCorp Inc.", value: 12000000, leadTime: "14 Days", delay: "8 Days", status: "Delayed (Transit)" },
         { id: 2, poNumber: "PO-2026-882", material: "Ready Mix Concrete (M40)", vendor: "CementTech Ltd", value: 3500000, leadTime: "4 Days", delay: "0 Days", status: "Filled" },
-        { id: 3, poNumber: "PO-2026-912", material: "Premium Marble Slabs", vendor: "BuildProps Marble", value: 6500000, leadTime: "8 Days", delay: "2 Days", status: "In Customs" },
+        { id: 3, poNumber: "PO-2026-912", material: "Imported Marble Slabs", vendor: "BuildProps Marble", value: 6500000, leadTime: "8 Days", delay: "2 Days", status: "In Customs" },
         { id: 4, poNumber: "PO-2026-909", material: "Substation Transformers", vendor: "ElectroWire Systems", value: 4200000, leadTime: "12 Days", delay: "5 Days", status: "Delayed (Production)" },
         { id: 5, poNumber: "PO-2026-915", material: "Autoclaved Aerated Blocks", vendor: "BrickMasters Corp", value: 1800000, leadTime: "3 Days", delay: "0 Days", status: "Filled" }
       ]
@@ -487,7 +487,7 @@ export function BusinessInsightsWorkspace() {
               animate={{ scale: 1, opacity: 1 }}
               className="bg-white border border-slate-200 rounded-2xl p-6 w-96 text-center shadow-enterprise"
             >
-              <h3 className="text-md font-bold text-slate-900 mb-2">Compiling Intelligence Audit</h3>
+              <h3 className="text-md font-bold text-slate-900 mb-2">Compiling Analytical Audit</h3>
               <p className="text-xs text-slate-500 mb-4">Exporting {activeTab} analytics as {exportingType.toUpperCase()}</p>
               <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-3">
                 <div
@@ -501,7 +501,7 @@ export function BusinessInsightsWorkspace() {
         )}
       </AnimatePresence>
 
-      {/* SECTION 1: GLOBAL INTELLIGENCE HEADER */}
+      {/* SECTION 1: GLOBAL INSIGHTS HEADER */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 mb-8 pb-6 border-b border-slate-200/60">
         <div>
           <div className="flex items-center space-x-2">
@@ -511,7 +511,7 @@ export function BusinessInsightsWorkspace() {
             </h1>
           </div>
           <p className="text-sm text-slate-500 mt-1 max-w-xl font-medium">
-            Cross-functional intelligence across sales, projects, finance, workforce and procurement.
+            Cross-functional performance analytics across sales, projects, finance, workforce and procurement.
           </p>
         </div>
 
@@ -1085,7 +1085,7 @@ export function BusinessInsightsWorkspace() {
                       details: [
                         { key: "Avg Quality Score", value: "8.2 / 10" },
                         { key: "Site Visit Interest Rate", value: "48%" },
-                        { key: "Premium Sector share", value: "72% of leads" }
+                        { key: "Prime Sector share", value: "72% of leads" }
                       ]
                     })}>
                       <div className="h-12 w-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shadow-sm group-hover:scale-105 transition">
@@ -1196,7 +1196,7 @@ export function BusinessInsightsWorkspace() {
         </div>
       </div>
 
-      {/* SECTION 3: INTELLIGENCE TABS NAVIGATION */}
+      {/* SECTION 3: PERFORMANCE TABS NAVIGATION */}
       <div className="flex overflow-x-auto gap-2 p-1 bg-slate-100/80 border border-slate-200 rounded-xl mb-6 scrollbar-hide">
         {(["sales", "projects", "finance", "workforce", "procurement"] as const).map((t) => (
           <button
@@ -1208,11 +1208,11 @@ export function BusinessInsightsWorkspace() {
                 : "text-slate-500 hover:text-slate-800"
             }`}
           >
-            {t === "sales" && "Sales Intelligence"}
-            {t === "projects" && "Project Intelligence"}
-            {t === "finance" && "Finance Intelligence"}
-            {t === "workforce" && "Workforce Intelligence"}
-            {t === "procurement" && "Procurement Intelligence"}
+            {t === "sales" && "Sales"}
+            {t === "projects" && "Projects"}
+            {t === "finance" && "Finance"}
+            {t === "workforce" && "Workforce"}
+            {t === "procurement" && "Procurement"}
           </button>
         ))}
       </div>
@@ -1265,11 +1265,11 @@ export function BusinessInsightsWorkspace() {
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h4 className="text-sm font-bold text-slate-900">
-                  {activeTab === "sales" && "Monthly Lead Creation Trend"}
-                  {activeTab === "projects" && "Actual vs Planned Project Completion"}
-                  {activeTab === "finance" && "Monthly Billing vs Collections"}
-                  {activeTab === "workforce" && "Daily Attendance Rate by Trade"}
-                  {activeTab === "procurement" && "Monthly Material Consumption"}
+                  {activeTab === "sales" && "Lead Creation"}
+                  {activeTab === "projects" && "Completion Progress"}
+                  {activeTab === "finance" && "Billing vs Collections"}
+                  {activeTab === "workforce" && "Attendance Rate"}
+                  {activeTab === "procurement" && "Material Consumption"}
                 </h4>
                 <p className="text-[10px] text-slate-500 font-medium">
                   Operational trends over past 6 months
@@ -1328,11 +1328,11 @@ export function BusinessInsightsWorkspace() {
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h4 className="text-sm font-bold text-slate-900">
-                  {activeTab === "sales" && "Lead Source Performance Metrics"}
-                  {activeTab === "projects" && "Unsold Real Estate Inventory"}
-                  {activeTab === "finance" && "Outstanding Invoices Aging Analysis"}
-                  {activeTab === "workforce" && "Trade Productivity Level Index"}
-                  {activeTab === "procurement" && "Purchase Orders Value vs Budget"}
+                  {activeTab === "sales" && "Lead Source Metrics"}
+                  {activeTab === "projects" && "Inventory Analysis"}
+                  {activeTab === "finance" && "Aging Analysis"}
+                  {activeTab === "workforce" && "Productivity Index"}
+                  {activeTab === "procurement" && "PO Value vs Budget"}
                 </h4>
                 <p className="text-[10px] text-slate-500 font-medium">Performance and allocation breakdown</p>
               </div>
@@ -1628,7 +1628,7 @@ export function BusinessInsightsWorkspace() {
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setDrillDownItem({
-                                        category: `${activeTab.toUpperCase()} Intelligence Drill-Down`,
+                                        category: `${activeTab.toUpperCase()} Performance Drill-Down`,
                                         label: row.name || row.customer || row.contractor || row.poNumber,
                                         details: [
                                           { key: "Database Identifier", value: `UID-4098-${row.id}` },
@@ -1956,12 +1956,12 @@ function ChartRenderer({
 
   // 1. Sales Trends
   const salesMonthlyLeadTrend = [
-    { month: "Jan", Premium: 120, Luxury: 45, Affordable: 240 },
-    { month: "Feb", Premium: 140, Luxury: 50, Affordable: 210 },
-    { month: "Mar", Premium: 180, Luxury: 65, Affordable: 280 },
-    { month: "Apr", Premium: 220, Luxury: 80, Affordable: 310 },
-    { month: "May", Premium: 250, Luxury: 95, Affordable: 290 },
-    { month: "Jun", Premium: 280, Luxury: 110, Affordable: 330 }
+    { month: "Jan", Prime: 120, Luxury: 45, Affordable: 240 },
+    { month: "Feb", Prime: 140, Luxury: 50, Affordable: 210 },
+    { month: "Mar", Prime: 180, Luxury: 65, Affordable: 280 },
+    { month: "Apr", Prime: 220, Luxury: 80, Affordable: 310 },
+    { month: "May", Prime: 250, Luxury: 95, Affordable: 290 },
+    { month: "Jun", Prime: 280, Luxury: 110, Affordable: 330 }
   ];
 
   const salesSourcePerf = [
@@ -2081,7 +2081,7 @@ function ChartRenderer({
             <Legend wrapperStyle={{ fontSize: "11px", color: "#475569" }} />
             <Area
               type="monotone"
-              dataKey="Premium"
+              dataKey="Prime"
               stroke={colors.blue}
               fillOpacity={1}
               fill="url(#colorPrem)"

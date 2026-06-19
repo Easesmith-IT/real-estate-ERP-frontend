@@ -217,7 +217,7 @@ export function LeadsWorkspace() {
         description="Capture, assign, and progress real sales opportunities through the internal ERP without leaving the sales workspace."
         actions={
           <Badge tone="info" className="h-fit">
-            Demo role: {role}
+            User Role: {role}
           </Badge>
         }
       />
@@ -276,7 +276,7 @@ export function LeadsWorkspace() {
               }
               resultLabel={`${leads.length} of ${leadsQuery.data?.items.length || 0} leads`}
               activeFilters={activeLeadFilters}
-              summary={`${overdueFollowUps.length} overdue follow-ups · ${premiumLeads.length} premium leads · ${brokerLinkedLeads.length} broker-linked`}
+              summary={`${overdueFollowUps.length} overdue follow-ups · ${premiumLeads.length} high-value leads · ${brokerLinkedLeads.length} broker-linked`}
               onClear={() => {
                 setSearch("");
                 setStageFilter("All");
